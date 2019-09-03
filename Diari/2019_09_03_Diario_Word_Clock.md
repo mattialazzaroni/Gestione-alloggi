@@ -5,37 +5,17 @@
 ### Canobbio, 03.09.2019
 
 ## Lavori svolti
-
-Durante questa giornata abbiamo finito la presentazione, la documentazione e l'implementazione.
-
-
 | Orario        | Lavori svolti   |
 | ------------- | --------------- |
-| 13:15 - 16:30 | Implementazione e Documentazione |
+| 13:15 - 14:45 | Nel corso delle prime due ore della lezione ci sono stati assegnati i progetti. |
+| 15:00 - 16:30 | In seguito ho iniziato a scrivere le domande da fare al docente responsabile (domande che ho poi fatto alle 16:30). Dopo di questo ho iniziato a creare la repository su github (https://github.com/mattialazzaroni/Gestione-alloggi/) e ho iniziato a creare il README.md, la documentazione (in cui ho già inserito alcuno delle informazioni principali) e il primo diario. |
 
 ## Problemi riscontrati e soluzioni adottate
-Non siamo riusciti a far funzionare i bottoni
-```arduino
-/*
-Accendo "sette" del colore passato
-*/
-void sette(uint32_t color)
-{
-  generateWord(4, 10, 14, color);
-}
+Nessun problema riscontrato.
 
-if (minute > 35)
-{
-  eTrentacinque(black);
-  sonoLe(white);
-  seiOn(black);
-  sette(white);
-}
-```
 ## Punto della situazione rispetto alla pianificazione
-
-In linea con la programmazione.
+Pianificazione ancora non iniziata.
 
 ## Programma di massima per la prossima giornata di lavoro
+Nella prossima giornata di lavoro dovrei iniziare l'analisi e la pianificazione del progetto.
 
-Fare la presentazione.
