@@ -4,6 +4,7 @@
 * Oltre alla registrazione, deve anche esserci la possibilità di un login?
 * Cosa intende con "Meccanismo di concorrenzialità"? Come funziona?
 * Cosa intende con "DVD per tutti i file del progetto"?
+* Come vengono gestiti tutti gli alloggi? Devo inserirli tutti a mano? Se si quanti? Vanno inseriti in un Database?
 
 # Risposte del docente
 * Hosting da vedere in futuro
@@ -11,3 +12,4 @@
 * Sì 
 * Si intende un meccanismo che faccia sì che due persone non possono riservare lo stesso alloggio contemporaneamente, per farlo si può usare un framework.
 * Alla fine del progetto tutti i file del progetto vanno caricati su un DVD e poi consegnati al responsabile. 
+*
