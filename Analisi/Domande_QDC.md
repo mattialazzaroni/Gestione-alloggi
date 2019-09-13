@@ -13,3 +13,4 @@
 * Si intende un meccanismo che faccia sì che due persone non possono riservare lo stesso alloggio contemporaneamente, per farlo si può usare un framework.
 * Alla fine del progetto tutti i file del progetto vanno caricati su un DVD e poi consegnati al responsabile. 
 *
+13.09.2019 - Prova modifica GM
