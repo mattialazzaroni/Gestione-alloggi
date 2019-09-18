@@ -18,7 +18,7 @@ D: **Come vengono gestiti tutti gli alloggi? Devo inserirli tutti a mano? Se si 
 
 R: *Vai a creare uno script che ti carichi in automatico gli alloggi, direi almeno una ventina. Lo script ti serve anche per fare un reset dei dati al fronte di errori di codice che ti "sporcano il DB".
 
-d: **Va progettato anche quello? O unisco tutto in un singolo Databse?**  
+D: **Va progettato anche quello? O unisco tutto in un singolo Databse?**  
 
 R: *Nel tuo DB manca in effetti la tabella Fattura che devi unire agli utenti, metti tutto in un DB unico. La relazione che hai messo tra Amministratore e Alloggio non serve e deve essere tolta, ma ti serve una relazione tra l'Amministratore e l'Ammionistratore gerente.
 Se hai delle domande domani sono in sede a partire dalle 10:05. Saluti GM
