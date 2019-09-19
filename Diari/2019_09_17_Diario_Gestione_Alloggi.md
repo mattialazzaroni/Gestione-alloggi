@@ -1,8 +1,8 @@
-# Gestione alloggi | Diario di lavoro - 13.09.2019
+# Gestione alloggi | Diario di lavoro - 17.09.2019
 
 ##### Mattia Lazzaroni
 
-### Canobbio, 13.09.2019
+### Canobbio, 17.09.2019
 
 ## Lavori svolti
 | Orario        | Lavori svolti   |
