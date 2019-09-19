@@ -14,7 +14,7 @@ R: *Si intende un meccanismo che faccia sì che due persone non possono riservar
 D: **Cosa intende con "DVD per tutti i file del progetto"?**  
 R: *Alla fine del progetto tutti i file del progetto vanno caricati su un DVD e poi consegnati al responsabile.*
 
-D: **Come vengono gestiti tutti gli alloggi? Devo inserirli tutti a mano? Se si quanti? Vanno inseriti in un Database? Se serve un database per gli alloggi, va separato da quello per gestire la fatturazione?
+D: **Come vengono gestiti tutti gli alloggi? Devo inserirli tutti a mano? Se si quanti? Vanno inseriti in un Database? Se serve un database per gli alloggi, va separato da quello per gestire la fatturazione?**
 
 R: *Vai a creare uno script che ti carichi in automatico gli alloggi, direi almeno una ventina. Lo script ti serve anche per fare un reset dei dati al fronte di errori di codice che ti "sporcano il DB".
 
