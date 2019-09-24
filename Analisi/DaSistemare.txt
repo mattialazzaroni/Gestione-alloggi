@@ -1,6 +1,0 @@
-v Rimuovere design architettura gantt
-v Aggiungere use case gantt
-Aggiungere script per pulizia db
-Testing ricursivo con implementazione con ok o non ok
-Opzionale: possibilità di registrare amministratore gerente
-v Modifica file domande
