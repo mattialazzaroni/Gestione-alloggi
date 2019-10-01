@@ -37,7 +37,9 @@ create table fattura(
     perc_parametro decimal(5,2) not null,
     check (perc_parametro >= 0.00 and perc_parametro <= 100.00),
     id_parametro int not null,
-    foreign key(id_parametro) references parametro(id)
+    email_utente varchar(30) not null,
+    foreign key(id_parametro) references parametro(id),
+    foreign key(email_utente) references utente(email)
 );
 
 create table tipologia(
@@ -48,7 +50,9 @@ create table alloggio(
 	id int primary key,
 	regione varchar(30) not null,
     citta varchar(30) not null,
-    nome_gerente varchar(30) not null,
-    foreign key(nome_gerente) references amministratore_gerente(nome)
+    email_gerente varchar(30) not null,
+    nome_tipologia varchar(30) not null,
+    foreign key(email_gerente) references amministratore_gerente(email),
+    foreign key(nome_tipologia) references tipologia(nome)
 );
 
