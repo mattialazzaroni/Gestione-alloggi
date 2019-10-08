@@ -47,25 +47,22 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">Amministratore gerente</a>
+              <a class="nav-link waves-effect" href="amministratore-gerente.php">Amministratore gerente</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/getting-started/download/"
-                target="_blank">Amministratore</a>
+              <a class="nav-link waves-effect" href="amministratore.php">Amministratore</a>
             </li>
           </ul>
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
             <li class="nav-item">
-              <a href="signup.php" class="nav-link border border-light rounded waves-effect"
-                target="_blank">
+              <a href="signup.php" class="nav-link border border-light rounded waves-effect">
                 <i class="fas fa-user-plus"></i>Registrati
               </a>
             </li>&nbsp;
             <li class="nav-item">
-              <a href="#" class="nav-link border border-light rounded waves-effect"
-                target="_blank">
+              <a href="login.php" class="nav-link border border-light rounded waves-effect">
                 <i class="fas fa-sign-in-alt"></i>Login
               </a>
             </li>

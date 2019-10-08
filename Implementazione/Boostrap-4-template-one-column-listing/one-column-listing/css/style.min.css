@@ -54,3 +54,7 @@
 .copyright, .copyright:hover{
     text-decoration: underline;
 }
+
+option[value='nessuno'][disabled] {
+    background-color: gray;
+}
