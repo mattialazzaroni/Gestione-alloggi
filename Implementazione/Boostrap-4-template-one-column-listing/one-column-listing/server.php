@@ -28,12 +28,11 @@ if (isset($_POST['reg_user'])) {
     }
     if (empty($number)) {
         array_push($errors, "Il numero di telefono è richiesto");
-    }
-    else{
-        if(!is_numeric($number)){
+    } else {
+        if (!is_numeric($number)) {
             array_push($errors, "Il formato per il numero di telefono non è valido");
         }
-        $full_number = '+'.$prefix.$number;
+        $full_number = '+' . $prefix . $number;
     }
     if (empty($password_1)) {
         array_push($errors, "La password è richiesta");
@@ -65,7 +64,34 @@ if (isset($_POST['reg_user'])) {
               VALUES('$email', '$name', '$surname', '$password', '$full_number')";
         mysqli_query($db, $query);
         $_SESSION['nome'] = $nome;
-        $_SESSION['success'] = "Hai effettuato il login correttamente";
+        $_SESSION['success'] = "Hai effettuato la registrazione correttamente";
         header('location: index.php');
+    }
+}
+
+
+if (isset($_POST['login_user'])) {
+    $email = mysqli_real_escape_string($db, $_POST['email']);
+    $password = mysqli_real_escape_string($db, $_POST['password']);
+
+    if (empty($email)) {
+        array_push($errors, "L'email è richiesta");
+    }
+    if (empty($password)) {
+        array_push($errors, "La password è richiesta");
+    }
+
+    if (count($errors) == 0) {
+        $password = md5($password);
+        $query = "SELECT * FROM utenti WHERE email='$email' AND password='$password'";
+        #echo $query;
+        $result = mysqli_query($db, $query);
+        if (mysqli_num_rows($result) == 1) {
+            $_SESSION['nome'] = $nome;
+            $_SESSION['success'] = "Hai effettuato il login correttamente";
+            header('location: index.php');
+        } else {
+            array_push($errors, "Combinazione email/password errata");
+        }
     }
 }

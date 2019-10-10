@@ -14,7 +14,7 @@
 Nessun problema riscontrato
 
 ## Punto della situazione rispetto alla pianificazione
-In ritardo rispetto alla pianificazione, in quanto dovrei aver giè terminato il back-end della pagina di login tuttavia devo ancora iniziarlo.
+In ritardo rispetto alla pianificazione, in quanto dovrei aver già terminato il back-end della pagina di login tuttavia devo ancora iniziarlo.
 
 ## Programma di massima per la prossima giornata di lavoro
 Nella prossima giornata di lavoro terminerò un paio di cose per quanto riguarda il form di registrazione e sicuramente initierò e terminerò la parte di back-end della pagina di login.

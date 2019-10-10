@@ -3,10 +3,18 @@ include('server.php');
 
 $name = '';
 $surname = '';
+$email = '';
+$number = '';
+$password_1 = '';
+$password_2 = '';
 
-if(isset($_POST['reg_user'])){
+if (isset($_POST['reg_user'])) {
 	$name = $_POST['name'];
 	$surname = $_POST['surname'];
+	$email = $_POST['email'];
+	$number = $_POST['number'];
+	$password_1 = $_POST['password_1'];
+	$password_2 = $_POST['password_2'];
 }
 
 ?>
@@ -27,12 +35,21 @@ if(isset($_POST['reg_user'])){
 	<link href="css/mdb.min.css" rel="stylesheet">
 	<!-- Your custom styles (optional) -->
 	<link href="css/style.min.css" rel="stylesheet">
+	<script src="jquery-3.4.1.js"></script>
+	<script>
+		$("#signup_form").submit(function(event) {
+			event.preventDefault();
+			var optionValue = $(".custom_select").val();
+			loadAjax();
+			$(".custom_select").val(optionValue).change();
+		});
+	</script>
 </head>
 
 <body>
 	<article class="card-body mx-auto" style="max-width: 450px;">
 		<h4 class="card-title mt-3 text-center">Crea il tuo account</h4>
-		<form method="post" action="signup.php">
+		<form method="post" action="signup.php" id="signup_form">
 			<div class="form-group input-group">
 				<div class="input-group-prepend">
 					<span class="input-group-text"> <i class="fa fa-user"></i> </span>
@@ -49,7 +66,7 @@ if(isset($_POST['reg_user'])){
 				<div class="input-group-prepend">
 					<span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
 				</div>
-				<input name="email" class="form-control" placeholder="Email" type="email">
+				<input name="email" class="form-control" placeholder="Email" type="email" value="<?php echo $email; ?>">
 			</div> <!-- form-group// -->
 			<div class="form-group input-group">
 				<div class="input-group-prepend">
@@ -271,19 +288,19 @@ if(isset($_POST['reg_user'])){
 					<option data-countryCode="ZM" value="260">Zambia (+260)</option>
 					<option data-countryCode="ZW" value="263">Zimbabwe (+263)</option>
 				</select>
-				<input name="number" class="form-control" placeholder="Numero di telefono" type="text">
+				<input name="number" class="form-control" placeholder="Numero di telefono" type="text" value="<?php echo $number; ?>">
 			</div> <!-- form-group// -->
 			<div class="form-group input-group">
 				<div class="input-group-prepend">
 					<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
 				</div>
-				<input name="password_1" class="form-control" placeholder="Crea la password" type="password">
+				<input name="password_1" class="form-control" placeholder="Crea la password" type="password" value="<?php echo $password_1; ?>">
 			</div> <!-- form-group// -->
 			<div class="form-group input-group">
 				<div class="input-group-prepend">
 					<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
 				</div>
-				<input name="password_2" class="form-control" placeholder="Ripeti la password" type="password">
+				<input name="password_2" class="form-control" placeholder="Ripeti la password" type="password" value="<?php echo $password_2; ?>">
 			</div> <!-- form-group// -->
 			<div class="form-group input-group">
 				<div class="input-group-prepend">
