@@ -3,19 +3,49 @@ session_start();
 
 $errors = array();
 
-//Mi connetto al database
-$db = mysqli_connect('localhost', 'root', '', 'gestione_alloggi');
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "gestione_alloggi";
+
+try {
+    //Mi connetto al database
+    $db = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch(PDOException $e){
+    echo "Connessione fallita: " . $e->getMessage();
+}
 
 if (isset($_POST['reg_user'])) {
     //Ricevo tutti gli input dal form
-    $name = mysqli_real_escape_string($db, $_POST['name']);
-    $surname = mysqli_real_escape_string($db, $_POST['surname']);
-    $email = mysqli_real_escape_string($db, $_POST['email']);
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $email = $_POST['email'];
     $prefix = $_POST['prefix'];
-    $number = mysqli_real_escape_string($db, $_POST['number']);
-    $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
-    $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+    $number = $_POST['number'];
+    $password_1 = $_POST['password_1'];
+    $password_2 = $_POST['password_2'];
     $user_type = $_POST['user_type'];
+
+    //Si controlla il database per assicurarsi che
+    //un utente non esiste gà con quella email
+    $user_check_query = "SELECT * FROM utente WHERE email='$email' LIMIT 1";
+    if($stmt = $db->prepare($user_check_query)){
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $param_email = trim($_POST["username"]);
+
+        if($stmt->execute()){
+            if($stmt->rowCount() == 1){
+                array_push($errors, "La seguente email è già in uso");
+            } else{
+                $email = trim($_POST["email"]);
+            }
+        } else{
+            echo "Ops! Qualcosa è andato storto. Riprova più tardi.";
+        }
+    }
+    unset($stmt);
 
     if (empty($name)) {
         array_push($errors, "Il nome è richiesto");
@@ -37,6 +67,11 @@ if (isset($_POST['reg_user'])) {
     if (empty($password_1)) {
         array_push($errors, "La password è richiesta");
     }
+    if(strlen(trim($password_1)) < 6){
+        array_push($errors, "Il tipo di utente è richiesto");
+    } else{
+        $password_1 = trim($password_1);
+    }
     if ($password_1 != $password_2) {
         array_push($errors, "Le due password non coincidono");
     }
@@ -44,24 +79,19 @@ if (isset($_POST['reg_user'])) {
         array_push($errors, "Il tipo di utente è richiesto");
     }
 
-    //Si controlla il database per assicurarsi che
-    //un utente non esiste gà con quella email
-    $user_check_query = "SELECT * FROM utente WHERE email='$email' LIMIT 1";
-    $result = mysqli_query($db, $user_check_query);
-    $user = mysqli_fetch_assoc($result);
-
-    if ($user) { // if user exists
-        if ($user['email'] === $email) {
-            array_push($errors, "La seguente email è già in uso");
-        }
-    }
 
     // Finalmente, si registra l'utente se non ci sono errori nel form
     if (count($errors) == 0) {
-        $password = md5($password_1); //encrypt the password before saving in the database
 
         $query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono) 
               VALUES('$email', '$name', '$surname', '$password', '$full_number')";
+
+        if($stmt = $db->prepare($query)){
+            $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+            $param_password = password_hash($password_1, PASSWORD_DEFAULT);
+        }
+
         mysqli_query($db, $query);
         $_SESSION['nome'] = $nome;
         $_SESSION['success'] = "Hai effettuato la registrazione correttamente";
@@ -71,8 +101,8 @@ if (isset($_POST['reg_user'])) {
 
 
 if (isset($_POST['login_user'])) {
-    $email = mysqli_real_escape_string($db, $_POST['email']);
-    $password = mysqli_real_escape_string($db, $_POST['password']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
     if (empty($email)) {
         array_push($errors, "L'email è richiesta");
