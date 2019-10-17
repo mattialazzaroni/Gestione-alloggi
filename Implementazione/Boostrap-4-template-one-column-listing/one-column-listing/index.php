@@ -31,8 +31,7 @@
         </a> -->
 
         <!-- Collapse -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -65,7 +64,31 @@
               <a href="login.php" class="nav-link border border-light rounded waves-effect">
                 <i class="fas fa-sign-in-alt"></i>Login
               </a>
-            </li>
+            </li>&nbsp;
+            <?php
+            ob_start();
+            include('login.php');
+            ob_end_clean();
+            if (isset($_SESSION['loggedin'])) :
+              ?>
+              <li class="nav-item">
+                <a href="logout.php" class="nav-link border border-light rounded waves-effect">
+                  <i class="fas fa-sign-out-alt"></i>Logout
+                </a>
+              </li>
+            <?php endif; ?>
+            <?php
+            ob_start();
+            include('signup.php');
+            ob_end_clean();
+            if (isset($_SESSION['signedup'])) :
+              ?>
+              <li class="nav-item">
+                <a href="logout.php" class="nav-link border border-light rounded waves-effect">
+                  <i class="fas fa-sign-out-alt"></i>Logout
+                </a>
+              </li>
+            <?php endif; ?>
           </ul>
 
         </div>
@@ -87,7 +110,23 @@
         <!-- Heading & Description -->
         <div class="wow fadeIn">
           <!--Section heading-->
-          <h2 class="h1 text-center mb-5">Cerca un alloggio</h2>
+          <?php
+          ob_start();
+          include('login.php');
+          ob_end_clean();
+          if (isset($_SESSION['loggedin'])) :
+            ?>
+            <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso. Cerca un alloggio</h2>
+          <?php
+            ob_start();
+            include('signup.php');
+            ob_end_clean();
+          elseif (isset($_SESSION['signedup'])) :
+            ?>
+            <h2 class="h1 text-center mb-5">Benvenuto <?php echo $_SESSION['name']; ?>, hai effettuato correttamente la registrazione. Cerca un alloggio</h2>
+          <?php else : ?>
+            <h2 class="h1 text-center mb-5">Cerca un alloggio </h2>
+          <?php endif; ?>
           <!--Section description-->
         </div>
         <!-- Heading & Description -->
@@ -96,199 +135,197 @@
         <div class="container" id="applyCSS">
           <div class="row">
             <div class="col-md-12">
-                    <div class="input-group" id="adv-search">
-                        <input type="text" class="form-control" placeholder="Cerca un alloggio" />
-                        <div class="input-group-btn">
-                            <div class="btn-group" role="group">
-                                <div class="dropdown dropdown-lg">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-                                    <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <form class="form-horizontal" role="form">
-                                          <h3>Filtri</h3>
-                                          <div class="form-group">
-                                            <label for="tipologia">Tipologia</label>
-                                            <select class="form-control">
-                                                <option value="0" selected>Albergo</option>
-                                                <option value="1">Bed & Breakfast</option>
-                                                <option value="2">Camping</option>
-                                            </select>
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="contain">Regione</label>
-                                            <input class="form-control" type="text" />
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="contain">Città</label>
-                                            <input class="form-control" type="text" />
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="contain">Nome gerente della struttura</label>
-                                            <input class="form-control" type="text" />
-                                          </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                            </div>
-                        </div>
+              <div class="input-group" id="adv-search">
+                <input type="text" class="form-control" placeholder="Cerca un alloggio" />
+                <div class="input-group-btn">
+                  <div class="btn-group" role="group">
+                    <div class="dropdown dropdown-lg">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                      <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <form class="form-horizontal" role="form">
+                          <h3>Filtri</h3>
+                          <div class="form-group">
+                            <label for="tipologia">Tipologia</label>
+                            <select class="form-control">
+                              <option value="0" selected>Albergo</option>
+                              <option value="1">Bed & Breakfast</option>
+                              <option value="2">Camping</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="contain">Regione</label>
+                            <input class="form-control" type="text" />
+                          </div>
+                          <div class="form-group">
+                            <label for="contain">Città</label>
+                            <input class="form-control" type="text" />
+                          </div>
+                          <div class="form-group">
+                            <label for="contain">Nome gerente della struttura</label>
+                            <input class="form-control" type="text" />
+                          </div>
+                        </form>
+                      </div>
                     </div>
+                    <button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
                   </div>
-                </div>
-          </div>
-        </div><br><br>
-
-
-        <!--Grid row-->
-        <div class="row wow fadeIn">
-
-          <!--Grid column-->
-          <div class="col-lg-5 col-xl-4 mb-4">
-            <!--Featured image-->
-            <div class="view overlay rounded z-depth-1-half">
-              <div class="view overlay">
-                <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/cXTThxoywNQ" allowfullscreen></iframe>
                 </div>
               </div>
             </div>
           </div>
-          <!--Grid column-->
-
-          <!--Grid column-->
-          <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
-            <h3 class="mb-3 font-weight-bold dark-grey-text">
-              <strong>MDB Quick Start</strong>
-            </h3>
-            <p class="grey-text">Get started with MDBootstrap, the world's most popular Material Design framework for
-              building responsive,
-              mobile-first sites.</p>
-            <p>
-              <strong>5 minutes, a few clicks and... done. You will be surprised at how easy it is.</strong>
-            </p>
-            <a href="https://www.youtube.com/watch?v=cXTThxoywNQ" target="_blank" class="btn btn-primary btn-md">Start
-              tutorial
-              <i class="fas fa-play ml-2"></i>
-            </a>
-          </div>
-          <!--Grid column-->
-
         </div>
-        <!--Grid row-->
+    </div><br><br>
 
-        <hr class="mb-5">
 
-        <!--Grid row-->
-        <div class="row mt-3 wow fadeIn">
+    <!--Grid row-->
+    <div class="row wow fadeIn">
 
-          <!--Grid column-->
-          <div class="col-lg-5 col-xl-4 mb-4">
-            <!--Featured image-->
-            <div class="view overlay rounded z-depth-1">
-              <img src="https://mdbootstrap.com/wp-content/uploads/2017/11/brandflow-tutorial-fb.jpg" class="img-fluid"
-                alt="">
-              <a href="https://mdbootstrap.com/education/tech-marketing/automated-app-introduction/" target="_blank">
-                <div class="mask rgba-white-slight"></div>
-              </a>
+      <!--Grid column-->
+      <div class="col-lg-5 col-xl-4 mb-4">
+        <!--Featured image-->
+        <div class="view overlay rounded z-depth-1-half">
+          <div class="view overlay">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/cXTThxoywNQ" allowfullscreen></iframe>
             </div>
           </div>
-          <!--Grid column-->
-
-          <!--Grid column-->
-          <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
-            <h3 class="mb-3 font-weight-bold dark-grey-text">
-              <strong>Bootstrap Automation</strong>
-            </h3>
-            <p class="grey-text">Learn how to create a smart website which learns your user and reacts properly to his
-              behavior.</p>
-            <a href="https://mdbootstrap.com/education/tech-marketing/automated-app-introduction/" target="_blank"
-              class="btn btn-primary btn-md">Start tutorial
-              <i class="fas fa-play ml-2"></i>
-            </a>
-          </div>
-          <!--Grid column-->
-
         </div>
-        <!--Grid row-->
+      </div>
+      <!--Grid column-->
 
-        <hr class="mb-5">
+      <!--Grid column-->
+      <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
+        <h3 class="mb-3 font-weight-bold dark-grey-text">
+          <strong>MDB Quick Start</strong>
+        </h3>
+        <p class="grey-text">Get started with MDBootstrap, the world's most popular Material Design framework for
+          building responsive,
+          mobile-first sites.</p>
+        <p>
+          <strong>5 minutes, a few clicks and... done. You will be surprised at how easy it is.</strong>
+        </p>
+        <a href="https://www.youtube.com/watch?v=cXTThxoywNQ" target="_blank" class="btn btn-primary btn-md">Start
+          tutorial
+          <i class="fas fa-play ml-2"></i>
+        </a>
+      </div>
+      <!--Grid column-->
 
-        <!--Grid row-->
-        <div class="row wow fadeIn">
+    </div>
+    <!--Grid row-->
 
-          <!--Grid column-->
-          <div class="col-lg-5 col-xl-4 mb-4">
-            <!--Featured image-->
-            <div class="view overlay rounded z-depth-1">
-              <img src="https://mdbootstrap.com/wp-content/uploads/2018/01/push-fb.jpg" class="img-fluid" alt="">
-              <a href="https://mdbootstrap.com/education/tech-marketing/web-push-introduction/" target="_blank">
-                <div class="mask rgba-white-slight"></div>
-              </a>
-            </div>
-          </div>
-          <!--Grid column-->
+    <hr class="mb-5">
 
-          <!--Grid column-->
-          <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
-            <h3 class="mb-3 font-weight-bold dark-grey-text">
-              <strong>Web Push notifications</strong>
-            </h3>
-            <p class="grey-text">Push messaging provides a simple and effective way to re-engage with your users and in
-              this tutorial
-              you'll learn how to add push notifications to your web app</p>
-            <a href="https://mdbootstrap.com/education/tech-marketing/web-push-introduction/" target="_blank" class="btn btn-primary btn-md">Start
-              tutorial
-              <i class="fas fa-play ml-2"></i>
-            </a>
-          </div>
-          <!--Grid column-->
+    <!--Grid row-->
+    <div class="row mt-3 wow fadeIn">
 
+      <!--Grid column-->
+      <div class="col-lg-5 col-xl-4 mb-4">
+        <!--Featured image-->
+        <div class="view overlay rounded z-depth-1">
+          <img src="https://mdbootstrap.com/wp-content/uploads/2017/11/brandflow-tutorial-fb.jpg" class="img-fluid" alt="">
+          <a href="https://mdbootstrap.com/education/tech-marketing/automated-app-introduction/" target="_blank">
+            <div class="mask rgba-white-slight"></div>
+          </a>
         </div>
-        <!--Grid row-->
+      </div>
+      <!--Grid column-->
 
-        <hr class="mb-5">
+      <!--Grid column-->
+      <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
+        <h3 class="mb-3 font-weight-bold dark-grey-text">
+          <strong>Bootstrap Automation</strong>
+        </h3>
+        <p class="grey-text">Learn how to create a smart website which learns your user and reacts properly to his
+          behavior.</p>
+        <a href="https://mdbootstrap.com/education/tech-marketing/automated-app-introduction/" target="_blank" class="btn btn-primary btn-md">Start tutorial
+          <i class="fas fa-play ml-2"></i>
+        </a>
+      </div>
+      <!--Grid column-->
 
-        <!--Pagination-->
-        <nav class="d-flex justify-content-center wow fadeIn">
-          <ul class="pagination pg-blue">
+    </div>
+    <!--Grid row-->
 
-            <!--Arrow left-->
-            <li class="page-item disabled">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-              </a>
-            </li>
+    <hr class="mb-5">
 
-            <li class="page-item active">
-              <a class="page-link" href="#">1
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">3</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">4</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">5</a>
-            </li>
+    <!--Grid row-->
+    <div class="row wow fadeIn">
 
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!--Pagination-->
+      <!--Grid column-->
+      <div class="col-lg-5 col-xl-4 mb-4">
+        <!--Featured image-->
+        <div class="view overlay rounded z-depth-1">
+          <img src="https://mdbootstrap.com/wp-content/uploads/2018/01/push-fb.jpg" class="img-fluid" alt="">
+          <a href="https://mdbootstrap.com/education/tech-marketing/web-push-introduction/" target="_blank">
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+      </div>
+      <!--Grid column-->
 
-      </section>
-      <!--Section: Cards-->
+      <!--Grid column-->
+      <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
+        <h3 class="mb-3 font-weight-bold dark-grey-text">
+          <strong>Web Push notifications</strong>
+        </h3>
+        <p class="grey-text">Push messaging provides a simple and effective way to re-engage with your users and in
+          this tutorial
+          you'll learn how to add push notifications to your web app</p>
+        <a href="https://mdbootstrap.com/education/tech-marketing/web-push-introduction/" target="_blank" class="btn btn-primary btn-md">Start
+          tutorial
+          <i class="fas fa-play ml-2"></i>
+        </a>
+      </div>
+      <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+    <hr class="mb-5">
+
+    <!--Pagination-->
+    <nav class="d-flex justify-content-center wow fadeIn">
+      <ul class="pagination pg-blue">
+
+        <!--Arrow left-->
+        <li class="page-item disabled">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+
+        <li class="page-item active">
+          <a class="page-link" href="#">1
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">4</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">5</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!--Pagination-->
+
+    </section>
+    <!--Section: Cards-->
 
     </div>
   </main>
@@ -338,7 +375,6 @@
   <script type="text/javascript">
     // Animations initialization
     new WOW().init();
-
   </script>
 </body>
 

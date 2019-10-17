@@ -9,12 +9,94 @@ $password_1 = '';
 $password_2 = '';
 
 if (isset($_POST['reg_user'])) {
+	//Ricevo tutti gli input dal form
 	$name = $_POST['name'];
 	$surname = $_POST['surname'];
 	$email = $_POST['email'];
+	$prefix = $_POST['prefix'];
 	$number = $_POST['number'];
 	$password_1 = $_POST['password_1'];
 	$password_2 = $_POST['password_2'];
+	$user_type = $_POST['user_type'];
+
+
+	if (empty($name)) {
+		array_push($errors, "Il nome è richiesto");
+	}
+	if (empty($surname)) {
+		array_push($errors, "Il cognome è richiesto");
+	}
+	if (empty($email)) {
+		array_push($errors, "L'email è richiesta");
+	} else{
+		if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+			array_push($errors, "Il formato dell'email non è valido");
+		}
+	}
+	if (empty($number)) {
+		array_push($errors, "Il numero di telefono è richiesto");
+	} else {
+		if (!is_numeric($number)) {
+			array_push($errors, "Il formato per il numero di telefono non è valido");
+		}
+		$full_number = '+' . $prefix . $number;
+	}
+	if (empty($password_1)) {
+		array_push($errors, "La password è richiesta");
+	}
+	if (strlen(trim($password_1)) < 6) {
+		array_push($errors, "La password è troppo corta");
+	} else {
+		$password_1 = trim($password_1);
+	}
+	if ($password_1 != $password_2) {
+		array_push($errors, "Le due password non coincidono");
+	}
+	if (empty($user_type)) {
+		array_push($errors, "Il tipo di utente è richiesto");
+	}
+
+	if (count($errors) == 0) {
+		//Si controlla il database per assicurarsi che
+		//un utente non esiste gà con quella email
+		$user_check_query = "SELECT * FROM utente WHERE email=:email LIMIT 1";
+		if ($stmt = $db->prepare($user_check_query)) {
+			$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+			$param_email = trim($email);
+			if ($stmt->execute()) {
+				if ($stmt->rowCount() == 1) {
+					array_push($errors, "La seguente email è già in uso");
+				} else {
+					$email = trim($email);
+					unset($stmt);
+
+					$hash = md5(time());
+
+					$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono) 
+              VALUES(:email, '$name', '$surname', :password, '$full_number')";
+
+					if ($stmt = $db->prepare($query)) {
+						$stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
+						$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+						$param_password = password_hash($password_1, PASSWORD_DEFAULT);
+						$param_email = trim($email);
+
+						if ($stmt->execute()) {
+							$_SESSION['name'] = $name;
+							$_SESSION['signedup'] = true;
+							header("location: check-your-email.php");
+						} else {
+							array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
+						}
+					}
+					unset($stmt);
+				}
+				unset($db);
+			} else {
+				echo "Ops! Qualcosa è andato storto. Riprova più tardi.";
+			}
+		}
+	}
 }
 
 ?>
@@ -35,7 +117,7 @@ if (isset($_POST['reg_user'])) {
 	<link href="css/mdb.min.css" rel="stylesheet">
 	<!-- Your custom styles (optional) -->
 	<link href="css/style.min.css" rel="stylesheet">
-	<script src="jquery-3.4.1.js"></script>
+	<script src="js/jquery-3.4.1.min.js"></script>
 	<script>
 		$("#signup_form").submit(function(event) {
 			event.preventDefault();
@@ -307,10 +389,9 @@ if (isset($_POST['reg_user'])) {
 					<span class="input-group-text"> <i class="fa fa-users"></i> </span>
 				</div>
 				<select name="user_type" class="form-control">
-					<optgroup label="Seleziona il tipo di utente">
-						</option>
-						<option value="utente">Utente base</option>
-						<option value="amministratore">Amministratore gerente</option>
+					<option value="" disabled>Seleziona il tipo di utente</option>
+					<option value="utente" selected>Utente base</option>
+					<option value="amministratore">Amministratore gerente</option>
 				</select>
 			</div> <!-- form-group end.// -->
 
@@ -326,6 +407,7 @@ if (isset($_POST['reg_user'])) {
 				<button type="submit" name="reg_user" class="btn btn-primary btn-block"> Crea Account </button>
 			</div> <!-- form-group// -->
 			<p class="text-center">Hai già un account? <a href="login.php">Login</a> </p>
+			<p class="text-center">Oppure <a href="index.php">torna alla home </a> </p>
 		</form>
 	</article>
 </body>

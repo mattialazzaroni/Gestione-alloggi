@@ -9,6 +9,48 @@ if(isset($_POST['login_user'])){
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 }
+
+
+if (isset($_POST['login_user'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    if (empty($email)) {
+        array_push($errors, "L'email è richiesta");
+    }
+    if (empty($password)) {
+        array_push($errors, "La password è richiesta");
+    }
+
+    if (count($errors) == 0) {
+        $query = "SELECT * FROM utente WHERE email=:email";
+        if ($stmt = $db->prepare($query)) {
+            $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+            $param_email = trim($email);
+            if ($stmt->execute()) {
+                if ($stmt->rowCount() == 1) {
+                    if ($row = $stmt->fetch()) {
+                        $email = $row["email"];
+						$hashed_password = $row["password_utente"];
+                        if (password_verify($password, $hashed_password)) {
+							$_SESSION["name"] = $row["nome"];
+                            $_SESSION["loggedin"] = true;
+                            header('location: index.php');
+                        } else {
+                            array_push($errors, "La password che ha inserito non è corretta");
+                        }
+                    } else {
+                        array_push($errors, "Nessun utente trovato con quella email");
+                    }
+                } else {
+                    array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
+                }
+            }
+            unset($stmt);
+        }
+        unset($db);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +100,8 @@ if(isset($_POST['login_user'])){
 			<div class="form-group">
 				<button type="submit" name="login_user" class="btn btn-primary btn-block"> Accedi </button>
             </div> <!-- form-group// -->
-            <p class="text-center">Non hai ancora un account? <a href="signup.php">Registrati</a> </p>
+			<p class="text-center">Non hai ancora un account? <a href="signup.php">Registrati</a> </p>
+			<p class="text-center">Oppure <a href="index.php">torna alla home </a> </p>
 		</form>
 	</article>
 </body>

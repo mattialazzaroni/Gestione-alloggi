@@ -6,7 +6,7 @@ create table utente(
 	email varchar(30) primary key, 
     nome varchar(30) not null,
     cognome varchar(30) not null,
-    password_utente varchar(20) not null,
+    password_utente varchar(255) not null,
     n_telefono varchar(20) not null
 );
 
