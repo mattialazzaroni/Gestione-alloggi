@@ -7,15 +7,19 @@ create table utente(
     nome varchar(30) not null,
     cognome varchar(30) not null,
     password_utente varchar(255) not null,
-    n_telefono varchar(20) not null
+    n_telefono varchar(20) not null,
+    hash varchar(255) not null,
+    active int(1) default 0
 );
 
 create table amministratore_gerente(
 	email varchar(30) primary key, 
     nome varchar(30) not null,
     cognome varchar(30) not null,
-    password_admin_gerente varchar(20) not null,
-    n_telefono varchar(20) not null
+    password_admin_gerente varchar(255) not null,
+    n_telefono varchar(20) not null,
+    hash varchar(255) not null,
+    active int(1) default 0
 );
 
 create table amministratore(

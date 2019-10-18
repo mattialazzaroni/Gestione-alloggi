@@ -19,17 +19,24 @@ if (isset($_POST['reg_user'])) {
 	$password_2 = $_POST['password_2'];
 	$user_type = $_POST['user_type'];
 
-
 	if (empty($name)) {
 		array_push($errors, "Il nome è richiesto");
+	} else {
+		if (strcspn($name, '0123456789') != strlen($name)) {
+			array_push($errors, "Il nome non può contenere valori numerici");
+		}
 	}
 	if (empty($surname)) {
 		array_push($errors, "Il cognome è richiesto");
+	} else {
+		if (strcspn($surname, '0123456789') != strlen($surname)) {
+			array_push($errors, "Il cognome non può contenere valori numerici");
+		}
 	}
 	if (empty($email)) {
 		array_push($errors, "L'email è richiesta");
-	} else{
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+	} else {
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			array_push($errors, "Il formato dell'email non è valido");
 		}
 	}
@@ -72,8 +79,8 @@ if (isset($_POST['reg_user'])) {
 
 					$hash = md5(time());
 
-					$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono) 
-              VALUES(:email, '$name', '$surname', :password, '$full_number')";
+					$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
+              VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
 
 					if ($stmt = $db->prepare($query)) {
 						$stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
@@ -84,7 +91,33 @@ if (isset($_POST['reg_user'])) {
 						if ($stmt->execute()) {
 							$_SESSION['name'] = $name;
 							$_SESSION['signedup'] = true;
-							header("location: check-your-email.php");
+
+							$pointed_password;
+							$password_length = strlen($password_1);
+							for($i = 0; $i < $password_length; $i++){
+								$pointed_password .= "*";
+							}
+
+							$to = $email;
+							$subject = 'Signup | Verification'; // Give the email a subject 
+							$message = "
+							Grazie per esserti registrato!
+							Il tuo account è stato creato, puoi accedere con le seguente email dopo aver attivato il tuo account premendo l'URL di seguito.
+ 
+							------------------------
+							Email: ' . $email . '
+							Password: ' . $pointed_password . '
+							------------------------
+ 
+							Fai clic su questo link per attivare il tuo account:
+							'localhost/verify.php?email=' . $email . '&hash=' . $hash . '
+ 
+							";
+
+							$headers = 'From:noreply@localhost.com' . "\r\n"; // Set from headers
+							mail($to, $subject, $message, $headers); // Send our email
+
+							header("location: verify.php");
 						} else {
 							array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
 						}
