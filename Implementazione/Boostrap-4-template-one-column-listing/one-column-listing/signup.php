@@ -115,26 +115,19 @@ if (isset($_POST['reg_user'])) {
 							//Server settings                    // Enable verbose debug output
 							$mail->isSMTP();  
 							$mail->SMTPDebug = 2;                                          // Send using SMTP
-							$mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+							$mail->Host       = 'smtp.live.com';                    // Set the SMTP server to send through
 							$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-							$mail->Username   = 'gestionealloggi2019@gmail.com';                     // SMTP username
-							$mail->Password   = 'Password&1';                               // 
+							$mail->Username   = 'gestionealloggi@hotmail.com';                     // SMTP username
+							$mail->Password   = 'Password&3';                               // 
 							$mail->SMTPSecure = 'tsl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
 							$mail->Port       = 587;                                    // TCP port to connect to
 
 							//Recipients
-							$mail->setFrom('gestionealloggi2019@gmail.com', 'Gestione alloggi');
+							$mail->setFrom('gestionealloggi@hotmail.com', 'Gestione alloggi');
 							$mail->addAddress($email, $name . ' ' . $surname);              // Name is optional
-							$mail->addReplyTo('gestionealloggi2019@gmail.com', 'Gestione alloggi');
-							//$mail->addCC('cc@example.com');
-							//$mail->addBCC('bcc@example.com');
-
-							// Attachments
-							//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-							//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+							$mail->addReplyTo('gestionealloggi@hotmail.com', 'Gestione alloggi');
 
 							// Content
-							$mail->isHTML(true); // Set email format to HTML
 							$mail->CharSet = "UTF-8";
 							$mail->Subject = 'Registrazione | Conferma';
 							$body = "Grazie per esserti registrato! <br>
@@ -146,8 +139,9 @@ if (isset($_POST['reg_user'])) {
 								------------------------ <br>
 	 
 								Fai clic su questo link per attivare il tuo account: <br>
-								localhost/verify.php?email=$email&hash=$hash";
+								<a href='http://localhost/verify.php?email=$email&hash=$hash'>http://localhost/verify.php?email=$email&hash=$hash</a>";
 							$mail->Body = $body;
+							$mail->isHTML(true);
 
 							if (!$mail->send()) {
 								echo 'Mailer Error: ' . $mail->ErrorInfo;

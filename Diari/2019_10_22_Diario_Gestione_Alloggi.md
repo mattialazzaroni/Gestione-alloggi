@@ -1,8 +1,8 @@
-# Gestione alloggi | Diario di lavoro - 18.10.2019
+# Gestione alloggi | Diario di lavoro - 22.10.2019
 
 ##### Mattia Lazzaroni
 
-### Canobbio, 18.10.2019
+### Canobbio, 22.10.2019
 
 ## Lavori svolti
 
@@ -11,7 +11,6 @@ Durante il weekend ho trovato del tempo per portarmi avanti col progetto: ho ins
 | Orario        | Lavori svolti   |
 | ------------- | --------------- |
 | 13:15 - 16:30 | Nel corso della giornata di oggi sono riuscito a mandare la conferma tramite email tramite la libreria PHPMailer. Per farlo ho creato un nuovo account google con le seguenti credenziali: gmail = gestionealloggi2019@gmail.com e password = Password&1 |
-
 
 ## Problemi riscontrati e soluzioni adottate
 Nessun problema riscontrato.
