@@ -1,4 +1,16 @@
 <?php
+
+// Importo le classi PHPMailer nel namespace globale
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'src/PHPMailer.php';
+require 'src/OAuth.php';
+require 'src/SMTP.php';
+require 'src/POP3.php';
+require 'src/Exception.php';
+
 include('server.php');
 
 $name = '';
@@ -92,32 +104,57 @@ if (isset($_POST['reg_user'])) {
 							$_SESSION['name'] = $name;
 							$_SESSION['signedup'] = true;
 
-							$pointed_password;
+							$pointed_password = "";
 							$password_length = strlen($password_1);
-							for($i = 0; $i < $password_length; $i++){
+							for ($i = 0; $i < $password_length; $i++) {
 								$pointed_password .= "*";
 							}
 
-							$to = $email;
-							$subject = 'Signup | Verification'; // Give the email a subject 
-							$message = "
-							Grazie per esserti registrato!
-							Il tuo account è stato creato, puoi accedere con le seguente email dopo aver attivato il tuo account premendo l'URL di seguito.
- 
-							------------------------
-							Email: ' . $email . '
-							Password: ' . $pointed_password . '
-							------------------------
- 
-							Fai clic su questo link per attivare il tuo account:
-							'localhost/verify.php?email=' . $email . '&hash=' . $hash . '
- 
-							";
+							$mail = new PHPMailer(true);
 
-							$headers = 'From:noreply@localhost.com' . "\r\n"; // Set from headers
-							mail($to, $subject, $message, $headers); // Send our email
+							//Server settings                    // Enable verbose debug output
+							$mail->isSMTP();  
+							$mail->SMTPDebug = 2;                                          // Send using SMTP
+							$mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+							$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+							$mail->Username   = 'gestionealloggi2019@gmail.com';                     // SMTP username
+							$mail->Password   = 'Password&1';                               // 
+							$mail->SMTPSecure = 'tsl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+							$mail->Port       = 587;                                    // TCP port to connect to
 
-							header("location: verify.php");
+							//Recipients
+							$mail->setFrom('gestionealloggi2019@gmail.com', 'Gestione alloggi');
+							$mail->addAddress($email, $name . ' ' . $surname);              // Name is optional
+							$mail->addReplyTo('gestionealloggi2019@gmail.com', 'Gestione alloggi');
+							//$mail->addCC('cc@example.com');
+							//$mail->addBCC('bcc@example.com');
+
+							// Attachments
+							//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+							//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+
+							// Content
+							$mail->isHTML(true); // Set email format to HTML
+							$mail->CharSet = "UTF-8";
+							$mail->Subject = 'Registrazione | Conferma';
+							$body = "Grazie per esserti registrato! <br>
+								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
+	 
+								------------------------ <br>
+								Email: $email <br>
+								Password: $pointed_password <br>
+								------------------------ <br>
+	 
+								Fai clic su questo link per attivare il tuo account: <br>
+								localhost/verify.php?email=$email&hash=$hash";
+							$mail->Body = $body;
+
+							if (!$mail->send()) {
+								echo 'Mailer Error: ' . $mail->ErrorInfo;
+							}
+
+							unset($mail);
+							header("location: check-your-email.php");
 						} else {
 							array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
 						}
