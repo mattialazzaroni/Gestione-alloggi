@@ -5,11 +5,12 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require 'src/PHPMailer.php';
-require 'src/OAuth.php';
-require 'src/SMTP.php';
-require 'src/POP3.php';
-require 'src/Exception.php';
+//require 'src/PHPMailer.php';
+//equire 'src/OAuth.php';
+//require 'src/SMTP.php';
+//equire 'src/POP3.php';
+//require 'src/Exception.php';
+require './vendor/autoload.php';
 
 include('server.php');
 
@@ -129,7 +130,7 @@ if (isset($_POST['reg_user'])) {
 
 							// Content
 							$mail->CharSet = "UTF-8";
-							$mail->Subject = 'Registrazione | Conferma';
+							$mail->Subject = 'Conferma la tua registrazione';
 							$body = "Grazie per esserti registrato! <br>
 								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
 	 
@@ -139,6 +140,7 @@ if (isset($_POST['reg_user'])) {
 								------------------------ <br>
 	 
 								Fai clic su questo link per attivare il tuo account: <br>
+								<!-- <a href='http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash'>http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash</a>-->
 								<a href='http://localhost/verify.php?email=$email&hash=$hash'>http://localhost/verify.php?email=$email&hash=$hash</a>";
 							$mail->Body = $body;
 							$mail->isHTML(true);

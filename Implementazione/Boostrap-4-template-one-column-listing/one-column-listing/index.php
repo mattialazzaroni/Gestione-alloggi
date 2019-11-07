@@ -77,18 +77,6 @@
                 </a>
               </li>
             <?php endif; ?>
-            <?php
-            ob_start();
-            include('signup.php');
-            ob_end_clean();
-            if (isset($_SESSION['signedup'])) :
-              ?>
-              <li class="nav-item">
-                <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-                  <i class="fas fa-sign-out-alt"></i>Logout
-                </a>
-              </li>
-            <?php endif; ?>
           </ul>
 
         </div>

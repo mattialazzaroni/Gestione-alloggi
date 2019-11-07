@@ -31,7 +31,7 @@
 
 <body class="container-fluid">
 
-    <article class="card-body mx-auto" style="max-width: 450px; margin-top:5%;">
+    <article class="card-body mx-auto" style="max-width: 450px;">
         <h2 class="card-title mt-3 text-center">Il tuo account è stato creato!</h2>
         <p class="text-center">Sei pregato di verificarlo cliccando il link di attivazione che ti è stato mandato per email.</p>
         <img src="img/done.png" style="width:40%; margin-left:auto; margin-right:auto; display:block">
