@@ -42,10 +42,10 @@ if (isset($_POST['login_user'])) {
 							array_push($errors, "La password che ha inserito non è corretta");
 						}
 					} else {
-						array_push($errors, "Nessun utente trovato con quella email");
+						array_push($errors, "Ops! Qualcosa è andato storto");
 					}
 				} else {
-					array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
+					array_push($errors, "Nessun utente trovato con questa email");
 				}
 			}
 			unset($stmt);

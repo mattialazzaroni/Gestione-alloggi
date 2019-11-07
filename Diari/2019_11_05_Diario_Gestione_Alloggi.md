@@ -17,7 +17,7 @@
 
 | Orario        | Lavori svolti   |
 | ------------- | --------------- |
-| 15:00 - 16:30 | Nel corso delle due ore successive ho iniziato a guardare come fare per inserire i dati sul sito dal database e mi sono informato sulla realizzazione di script legati ad un database.  |
+| 15:00 - 16:30 | Nel corso delle due ore successive ho iniziato a guardare come fare per inserire i dati sul sito dal database e mi sono informato sulla realizzazione di script legati ad un database. |
 
 ## Problemi riscontrati e soluzioni adottate
 Nessun problema riscontrato.

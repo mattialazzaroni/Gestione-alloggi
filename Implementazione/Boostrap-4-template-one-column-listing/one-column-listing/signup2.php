@@ -140,7 +140,7 @@ if (isset($_POST['reg_user'])) {
 								------------------------ <br>
 	 
 								Fai clic su questo link per attivare il tuo account: <br>
-								<a href='http://localhost/verify.php?email=$email&hash=$hash'>http://localhost/verify.php?email=$email&hash=$hash</a>";
+								<a href='http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash'>http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash</a>";
 							$mail->Body = $body;
 							$mail->isHTML(true);
 

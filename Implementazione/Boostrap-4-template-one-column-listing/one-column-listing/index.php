@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Riserva subito un alloggio!</title>
@@ -66,6 +66,7 @@
               </a>
             </li>&nbsp;
             <?php
+            header("Content-Type: text/html; charset=ISO-8859-1");
             ob_start();
             include('login.php');
             ob_end_clean();
@@ -164,113 +165,52 @@
         </div>
     </div><br><br>
 
+    <?php
+    ob_start();
+    include('server.php');
+    ob_end_clean();
 
-    <!--Grid row-->
-    <div class="row wow fadeIn">
+    $get_max_id = "SELECT id FROM alloggio ORDER BY id DESC LIMIT 1";
+    $stmt = $db->prepare($get_max_id);
+    $stmt->execute();
+    $max_id = implode($stmt->fetch(PDO::FETCH_ASSOC));
+    for ($i = 1; $i < $max_id; $i++) {
+      $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+      $stmt = $db->prepare($accomodation_query);
+      $stmt->execute();
+      $row = $stmt->fetch();
+      $nome = $row["nome"];
+      $indirizzo = $row["indirizzo"];
+      $link_immagine = $row["link_immagine"];
+      $regione = $row["regione"];
+      $citta = $row["citta"];
+      $email_gerente = $row["email_gerente"];
+      $nome_tipologia = $row["nome_tipologia"];
+      echo '<div class="row wow fadeIn">
+                <div class="col-lg-5 col-xl-4 mb-4">
+                  <div class="view overlay rounded z-depth-1">
+                    <img src="' . $link_immagine . '" class="img-fluid" alt="">
+                    <a href="#" target="_blank">
+                      <div class="mask rgba-white-slight"></div>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
+                  <h3 class="mb-3 font-weight-bold dark-grey-text">
+                    <strong>' . $nome . '</strong>
+                  </h3>
+                  <p class="grey-text">' . $indirizzo . '</p>
+                  <a href="#" target="_blank" class="btn btn-primary btn-md">Mostra dettagli
+                    <i class="fas fa-play ml-2"></i>
+                  </a>
+                </div>
+              </div>
+              <hr class="mb-5">';
+    }
 
-      <!--Grid column-->
-      <div class="col-lg-5 col-xl-4 mb-4">
-        <!--Featured image-->
-        <div class="view overlay rounded z-depth-1-half">
-          <div class="view overlay">
-            <div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/cXTThxoywNQ" allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Grid column-->
+    ?>
 
-      <!--Grid column-->
-      <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
-        <h3 class="mb-3 font-weight-bold dark-grey-text">
-          <strong>MDB Quick Start</strong>
-        </h3>
-        <p class="grey-text">Get started with MDBootstrap, the world's most popular Material Design framework for
-          building responsive,
-          mobile-first sites.</p>
-        <p>
-          <strong>5 minutes, a few clicks and... done. You will be surprised at how easy it is.</strong>
-        </p>
-        <a href="https://www.youtube.com/watch?v=cXTThxoywNQ" target="_blank" class="btn btn-primary btn-md">Start
-          tutorial
-          <i class="fas fa-play ml-2"></i>
-        </a>
-      </div>
-      <!--Grid column-->
-
-    </div>
-    <!--Grid row-->
-
-    <hr class="mb-5">
-
-    <!--Grid row-->
-    <div class="row mt-3 wow fadeIn">
-
-      <!--Grid column-->
-      <div class="col-lg-5 col-xl-4 mb-4">
-        <!--Featured image-->
-        <div class="view overlay rounded z-depth-1">
-          <img src="https://mdbootstrap.com/wp-content/uploads/2017/11/brandflow-tutorial-fb.jpg" class="img-fluid" alt="">
-          <a href="https://mdbootstrap.com/education/tech-marketing/automated-app-introduction/" target="_blank">
-            <div class="mask rgba-white-slight"></div>
-          </a>
-        </div>
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
-        <h3 class="mb-3 font-weight-bold dark-grey-text">
-          <strong>Bootstrap Automation</strong>
-        </h3>
-        <p class="grey-text">Learn how to create a smart website which learns your user and reacts properly to his
-          behavior.</p>
-        <a href="https://mdbootstrap.com/education/tech-marketing/automated-app-introduction/" target="_blank" class="btn btn-primary btn-md">Start tutorial
-          <i class="fas fa-play ml-2"></i>
-        </a>
-      </div>
-      <!--Grid column-->
-
-    </div>
-    <!--Grid row-->
-
-    <hr class="mb-5">
-
-    <!--Grid row-->
-    <div class="row wow fadeIn">
-
-      <!--Grid column-->
-      <div class="col-lg-5 col-xl-4 mb-4">
-        <!--Featured image-->
-        <div class="view overlay rounded z-depth-1">
-          <img src="https://mdbootstrap.com/wp-content/uploads/2018/01/push-fb.jpg" class="img-fluid" alt="">
-          <a href="https://mdbootstrap.com/education/tech-marketing/web-push-introduction/" target="_blank">
-            <div class="mask rgba-white-slight"></div>
-          </a>
-        </div>
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
-        <h3 class="mb-3 font-weight-bold dark-grey-text">
-          <strong>Web Push notifications</strong>
-        </h3>
-        <p class="grey-text">Push messaging provides a simple and effective way to re-engage with your users and in
-          this tutorial
-          you'll learn how to add push notifications to your web app</p>
-        <a href="https://mdbootstrap.com/education/tech-marketing/web-push-introduction/" target="_blank" class="btn btn-primary btn-md">Start
-          tutorial
-          <i class="fas fa-play ml-2"></i>
-        </a>
-      </div>
-      <!--Grid column-->
-
-    </div>
-    <!--Grid row-->
-
-    <hr class="mb-5">
 
     <!--Pagination-->
     <nav class="d-flex justify-content-center wow fadeIn">

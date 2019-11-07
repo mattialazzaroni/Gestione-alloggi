@@ -1,0 +1,4 @@
+Prima di caricare i file:
+
+-cambiare il file "server.php" (caricare quello con le informazioni del database sul server efof.myd.infomaniak.com)
+-cambiare il file "signup.php" (caricare quello con il link al sito invece che il link a localhost)  

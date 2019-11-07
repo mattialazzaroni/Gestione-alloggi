@@ -1,11 +1,23 @@
 use gestione_alloggi;
+/*use efof_i16lazmat;*/
 
 delete from alloggio;
+delete from tipologia;
+delete from amministratore_gerente;
+delete from amministratore;
+
+insert into tipologia values ("Albergo");
+insert into tipologia values ("Bed & Breakfast");
+insert into tipologia values ("Camping");
+
+insert into amministratore_gerente values ("mattia.lazzaroni@samtrevano.ch", "Mattia", "Lazzaroni", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "+41764650110", "807685d729e35ac6862a94c069eb68b2", 1);
+
+insert into amministratore values ("mattia.lazzaroni@samtrevano.ch", "Mattia", "Lazzaroni");
 
 insert into alloggio values (1,
  "Hotel Fergus Geminis",
  "Carrer dels Tamarells, s/n, 07600 Palma, Illes Balears, Spain",
- "https://www.fergushotels.com/backoffice/images/thumbs/medium/247-pool-and-building-2.jpg",
+ "https://www.fergushotels.com/backoffice/images/1405-building-andpool.jpg",
  "Isole Baleari",
  "Palma di Maiorca",
  (select email from amministratore_gerente where email = "mattia.lazzaroni@samtrevano.ch"),
@@ -23,7 +35,7 @@ insert into alloggio values (2,
 insert into alloggio values (3,
  "Keswick Camping and Caravanning Club Site",
  "Crow Park Rd, Keswick CA12 5EP, UK",
- "https://cdn.csuk-solutions.net/uploads/f7/6257404-keswick-camping-and-caravanning-club-site-1.jpg",
+ "https://mb.cision.com/Public/6265/9664585/b695f780fd664e45_800x800ar.jpg",
  "North West",
  "Keswick",
  (select email from amministratore_gerente where email = "mattia.lazzaroni@samtrevano.ch"),
@@ -104,7 +116,7 @@ insert into alloggio values (11,
 insert into alloggio values (12,
  "Chestnut Hill Bed & Breakfast",
  "236 Caroline St, Orange, VA 22960, United States",
- "https://www.bedandbreakfast.com/files/live/sites/bnbus/files/shared/Inns/luxurious/1170x450_carson-ridge-luxury-cabins.jpg",
+ "https://www.bedandbreakfast.com/files/live/sites/bnbus/files/shared/Inns/luxurious/1170x450_chestnut-hill.jpg",
  "Virginia",
  "Orange",
  (select email from amministratore_gerente where email = "mattia.lazzaroni@samtrevano.ch"),
