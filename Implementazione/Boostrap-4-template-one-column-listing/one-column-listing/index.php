@@ -134,15 +134,15 @@
                     <div class="dropdown dropdown-lg">
                       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                       <div class="dropdown-menu dropdown-menu-right" role="menu">
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" action="index.php" role="form" method="post">
                           <h3>Filtri</h3>
                           <div class="form-group">
                             <label for="tipologia">Tipologia</label>
-                            <select class="form-control" onchange="filtroTipologia(this)">
-                              <option value="0" selected disabled>Qualsiasi</option>
-                              <option value="1">Albergo</option>
-                              <option value="2">Bed & Breakfast</option>
-                              <option value="3">Camping</option>
+                            <select class="form-control" name="tipologia" onchange="this.form.submit()">
+                              <option value="" selected disabled>Qualsiasi</option>
+                              <option value="Albergo">Albergo</option>
+                              <option value="Bed & Breakfast">Bed & Breakfast</option>
+                              <option value="Camping">Camping</option>
                             </select>
                           </div>
                           <div class="form-group">
@@ -170,6 +170,12 @@
     </div><br><br>
 
     <?php
+
+    //Prendo il valore del filtro della tipologia.
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+      $value = $_POST["tipologia"];
+    }
+
     ob_start();
     include('server.php');
     ob_end_clean();
@@ -180,8 +186,25 @@
     $max_id = implode($stmt->fetch(PDO::FETCH_ASSOC));
     //Ciclo che viene eseguito in base al numero di alloggi presenti che stampa gli alloggi. 
     for ($i = 1; $i < $max_id; $i++) {
-      $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+      //Se viene utiilizzato un filtro per la tipologia utilizzo una certa query.
+      if(isset($value)){
+        $accomodation_query = "SELECT id FROM alloggio WHERE id = $i AND nome_tipologia = '$value' LIMIT 1";
+        $stmt = $db->prepare($accomodation_query);
+        $stmt->execute();
+        $id = implode($stmt->fetch(PDO::FETCH_ASSOC));
+        if($id = $i){
+          $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+        }
+        else{
+          break;
+        }
+      }
+      //Altrimenti uso la query di "default".
+      else{
+        $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+      }
       $stmt = $db->prepare($accomodation_query);
+      //Eseguo la query.
       $stmt->execute();
       $row = $stmt->fetch();
       $nome = $row["nome"];
@@ -309,20 +332,6 @@
   <script type="text/javascript">
     // Animations initialization
     new WOW().init();
-  </script>
-
-  <script type="text/javascript">
-    function filtroTipologia(selectObject){
-      var value = selectObject.value;
-      var tipologia;
-      if (value == 1){
-        tipologia = "Albergo";
-      } else if(value == 2) {
-        tipologia = "Bed & Breakfast";
-      } else if(values == 3) {
-        tipologia = "Camping";
-      }
-    }
   </script>
 
 </body>
