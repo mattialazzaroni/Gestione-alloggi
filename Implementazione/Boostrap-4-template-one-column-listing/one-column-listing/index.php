@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Riserva subito un alloggio!</title>
@@ -70,6 +70,7 @@
             ob_start();
             include('login.php');
             ob_end_clean();
+            //Stampo il bottone per il logout se l'utente ha effettuato il login.
             if (isset($_SESSION['loggedin'])) :
               ?>
               <li class="nav-item">
@@ -103,6 +104,7 @@
           ob_start();
           include('login.php');
           ob_end_clean();
+          //Se l'utente esegue il login cambio il messaggio di benvenuto.
           if (isset($_SESSION['loggedin'])) :
             ?>
             <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso. Cerca un alloggio</h2>
@@ -110,6 +112,7 @@
             ob_start();
             include('signup.php');
             ob_end_clean();
+            //Se l'utente si registra cambio il messaggio di benvenuto.
           elseif (isset($_SESSION['signedup'])) :
             ?>
             <h2 class="h1 text-center mb-5">Benvenuto <?php echo $_SESSION['name']; ?>, hai effettuato correttamente la registrazione. Cerca un alloggio</h2>
@@ -120,7 +123,7 @@
         </div>
         <!-- Heading & Description -->
 
-
+        <!-- Stampo la barra di ricerca dell'alloggio con i filtri. -->
         <div class="container" id="applyCSS">
           <div class="row">
             <div class="col-md-12">
@@ -135,10 +138,11 @@
                           <h3>Filtri</h3>
                           <div class="form-group">
                             <label for="tipologia">Tipologia</label>
-                            <select class="form-control">
-                              <option value="0" selected>Albergo</option>
-                              <option value="1">Bed & Breakfast</option>
-                              <option value="2">Camping</option>
+                            <select class="form-control" onchange="filtroTipologia(this)">
+                              <option value="0" selected disabled>Qualsiasi</option>
+                              <option value="1">Albergo</option>
+                              <option value="2">Bed & Breakfast</option>
+                              <option value="3">Camping</option>
                             </select>
                           </div>
                           <div class="form-group">
@@ -146,7 +150,7 @@
                             <input class="form-control" type="text" />
                           </div>
                           <div class="form-group">
-                            <label for="contain">Città</label>
+                            <label for="contain">Citt&#224;</label>
                             <input class="form-control" type="text" />
                           </div>
                           <div class="form-group">
@@ -169,11 +173,12 @@
     ob_start();
     include('server.php');
     ob_end_clean();
-
+    //Preparo la query per prendere l'id più grande così da sapere il numero di alloggi da stampare.
     $get_max_id = "SELECT id FROM alloggio ORDER BY id DESC LIMIT 1";
     $stmt = $db->prepare($get_max_id);
     $stmt->execute();
     $max_id = implode($stmt->fetch(PDO::FETCH_ASSOC));
+    //Ciclo che viene eseguito in base al numero di alloggi presenti che stampa gli alloggi. 
     for ($i = 1; $i < $max_id; $i++) {
       $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
       $stmt = $db->prepare($accomodation_query);
@@ -186,6 +191,7 @@
       $citta = $row["citta"];
       $email_gerente = $row["email_gerente"];
       $nome_tipologia = $row["nome_tipologia"];
+      //Stampo un alloggio.
       echo '<div class="row wow fadeIn">
                 <div class="col-lg-5 col-xl-4 mb-4">
                   <div class="view overlay rounded z-depth-1">
@@ -304,6 +310,21 @@
     // Animations initialization
     new WOW().init();
   </script>
+
+  <script type="text/javascript">
+    function filtroTipologia(selectObject){
+      var value = selectObject.value;
+      var tipologia;
+      if (value == 1){
+        tipologia = "Albergo";
+      } else if(value == 2) {
+        tipologia = "Bed & Breakfast";
+      } else if(values == 3) {
+        tipologia = "Camping";
+      }
+    }
+  </script>
+
 </body>
 
 </html>
