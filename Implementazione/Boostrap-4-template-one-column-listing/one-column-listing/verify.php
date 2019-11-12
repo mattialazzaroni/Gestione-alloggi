@@ -1,7 +1,9 @@
 <?php
+//Includo il file che esegue la connessione al database.
 include('server.php');
 ?>
 
+<!-- Pagina che viene mostrata all'utente quando ha cliccato il link ricevuto nelle email -->
 <!DOCTYPE html>
 <html>
 
@@ -24,30 +26,33 @@ include('server.php');
 
     <?php
 
+    //Controllo di ricevere un email e una hash tramite url.
     if (isset($_GET['email']) && !empty($_GET['email']) and isset($_GET['hash']) && !empty($_GET['hash'])) {
-        // Verify data
-        $email = $_GET['email']; // Set email variable
-        $hash = $_GET['hash']; // Set hash variable
+        $email = $_GET['email']; // Imposto l'email
+        $hash = $_GET['hash']; // Imposto l'hash
+        //Preparo la query
         $search = $db->prepare("SELECT email, hash, active FROM utente WHERE email=:email AND hash=:hash AND active='0'");
         $search->bindParam(":email", $email, PDO::PARAM_STR);
         $search->bindParam(":hash", $hash, PDO::PARAM_STR);
         $search->execute();
         $match = $search->rowCount();
 
+        //Nel caso che la query produce un risultato, modifico l'active dell'utente nel db e stampo un messaggio di riuscita all'utente.
         if ($match > 0) {
             $update = $db->prepare("UPDATE utente SET active='1' WHERE email='" . $email . "' AND hash='" . $hash . "' AND active='0'");
             $update->execute();
             echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">';
             echo '<br><div style="font-size:20px;"><b>Congratulazioni!</b><br> Il tuo account è stato attivato, ora puoi fare il login.</div><br>';
-            //$_SESSION['no-home'] = true;
             echo '<a href="login.php" class="btn btn-primary btn-block"> Torna alla login </a>';
             echo '</div>';
+        //Nel caso che la query non produca nessun risultato, stampo un messaggio di errore all'utente.
         } else { 
             echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">';
             echo "<br><div>L'URL non è valido o hai già attivato il tuo account.</div><br>";
             echo '<a href="index.php" class="btn btn-primary btn-block"> Torna alla home </a>';
             echo '</div>';
         }
+    //Se non ricevo email o hash, stampo un messaggio di errore.
     } else {
         // Invalid approach
         echo '<br><div class="text-center">Approccio non valido, si prega di utilizzare il link che è stato inviato alla tua email.</div>';

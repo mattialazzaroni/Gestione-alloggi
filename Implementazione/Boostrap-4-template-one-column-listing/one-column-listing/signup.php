@@ -1,19 +1,16 @@
 <?php
-
-// Importo le classi PHPMailer nel namespace globale
+// Importo le classi PHPMailer nel namespace globale.
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//require 'src/PHPMailer.php';
-//equire 'src/OAuth.php';
-//require 'src/SMTP.php';
-//equire 'src/POP3.php';
-//require 'src/Exception.php';
+//Includo il file autoload di composer per PHPMailer.
 require './vendor/autoload.php';
 
+//Includo il file che esegue la connessione al database.
 include('server.php');
 
+//Dichiaro le variabili che conterrano i dati inseriti dall'utente che andranno controllati.
 $name = '';
 $surname = '';
 $email = '';
@@ -22,7 +19,7 @@ $password_1 = '';
 $password_2 = '';
 
 if (isset($_POST['reg_user'])) {
-	//Ricevo tutti gli input dal form
+	//Ricevo tutti gli input dal form.
 	$name = $_POST['name'];
 	$surname = $_POST['surname'];
 	$email = $_POST['email'];
@@ -32,6 +29,7 @@ if (isset($_POST['reg_user'])) {
 	$password_2 = $_POST['password_2'];
 	$user_type = $_POST['user_type'];
 
+	//Eseguo tutti i vari controlli sugli input.
 	if (empty($name)) {
 		array_push($errors, "Il nome è richiesto");
 	} else {
@@ -76,45 +74,58 @@ if (isset($_POST['reg_user'])) {
 		array_push($errors, "Il tipo di utente è richiesto");
 	}
 
+	//Se non ci sono errori si procede alla preparazione della query.
 	if (count($errors) == 0) {
-		//Si controlla il database per assicurarsi che
-		//un utente non esiste gà con quella email
+		//Query per controllare che un utente non esiste gà con quella email.
 		$user_check_query = "SELECT * FROM utente WHERE email=:email LIMIT 1";
+		//Preparo la query.
 		if ($stmt = $db->prepare($user_check_query)) {
 			$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
 			$param_email = trim($email);
+			//Eseguo la query.
 			if ($stmt->execute()) {
+				//Se la query ritorna una riga stampo un errore.
 				if ($stmt->rowCount() == 1) {
 					array_push($errors, "La seguente email è già in uso");
+					//Altrimenti procedo
 				} else {
 					$email = trim($email);
 					unset($stmt);
 
+					//Creo una hash univoca in base all'orario corrente espresso in numero di secondi dall'epoca di Unix.
 					$hash = md5(time());
 
+					//Definisco la query che inserisce l'utente.
 					$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
               VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
 
+					//Preparo la query.
 					if ($stmt = $db->prepare($query)) {
 						$stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
 						$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
 						$param_password = password_hash($password_1, PASSWORD_DEFAULT);
 						$param_email = trim($email);
 
+						//Eseguo la query.
 						if ($stmt->execute()) {
 							$_SESSION['name'] = $name;
 							$_SESSION['signedup'] = true;
 
+							//Definisco la variabile che conterrà la password rappresentata con dei puntini.
 							$pointed_password = "";
+							//Prendo la lunghezza della password.
 							$password_length = strlen($password_1);
+							//Ciclo in base alla lunghezza della password.
 							for ($i = 0; $i < $password_length; $i++) {
+								//Assegno un puntino per ogni carattere della password alla variabile.
 								$pointed_password .= "*";
 							}
 
+							//Istanzio un nuovo oggetto PHPMailer.
 							$mail = new PHPMailer(true);
 
 							//Server settings                    // Enable verbose debug output
-							$mail->isSMTP();  
+							$mail->isSMTP();
 							$mail->SMTPDebug = 2;                                          // Send using SMTP
 							$mail->Host       = 'smtp.live.com';                    // Set the SMTP server to send through
 							$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
@@ -131,24 +142,18 @@ if (isset($_POST['reg_user'])) {
 							// Content
 							$mail->CharSet = "UTF-8";
 							$mail->Subject = 'Conferma la tua registrazione';
-							$body = "Grazie per esserti registrato! <br>
-								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
-	 
-								------------------------ <br>
-								Email: $email <br>
-								Password: $pointed_password <br>
-								------------------------ <br>
-	 
-								Fai clic su questo link per attivare il tuo account: <br>
-								<a href='http://localhost/verify.php?email=$email&hash=$hash'>http://localhost/verify.php?email=$email&hash=$hash</a>";
+							//Includo il file contenente il corpo dell'email.
+							require 'emailBody.php';
 							$mail->Body = $body;
 							$mail->isHTML(true);
 
+							//Mando l'email.
 							if (!$mail->send()) {
 								echo 'Mailer Error: ' . $mail->ErrorInfo;
 							}
 
 							unset($mail);
+							//Mi sposto ad un file che indice all'utente di controllare le sue email.
 							header("location: check-your-email.php");
 						} else {
 							array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
@@ -158,7 +163,7 @@ if (isset($_POST['reg_user'])) {
 				}
 				unset($db);
 			} else {
-				echo "Ops! Qualcosa è andato storto. Riprova più tardi.";
+				array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi.");
 			}
 		}
 	}
@@ -183,17 +188,11 @@ if (isset($_POST['reg_user'])) {
 	<!-- Your custom styles (optional) -->
 	<link href="css/style.min.css" rel="stylesheet">
 	<script src="js/jquery-3.4.1.min.js"></script>
-	<script>
-		$("#signup_form").submit(function(event) {
-			event.preventDefault();
-			var optionValue = $(".custom_select").val();
-			loadAjax();
-			$(".custom_select").val(optionValue).change();
-		});
-	</script>
 </head>
 
 <body>
+	
+	<!-- Contenuto visivo della pagina con form di registrazione -->
 	<article class="card-body mx-auto" style="max-width: 450px;">
 		<h4 class="card-title mt-3 text-center">Crea il tuo account</h4>
 		<form method="post" action="signup.php" id="signup_form">

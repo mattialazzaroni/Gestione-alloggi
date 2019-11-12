@@ -1,3 +1,4 @@
+<!-- Homepage del progetto -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +16,8 @@
   <!-- Your custom styles (optional) -->
   <link href="css/style.min.css" rel="stylesheet">
 </head>
+
+<!-- Contenuto visivo della pagina -->
 
 <body>
 
@@ -66,9 +69,13 @@
               </a>
             </li>&nbsp;
             <?php
+            //Imposto il charset.
             header("Content-Type: text/html; charset=ISO-8859-1");
+            //Metodo che impedisce a tutto quello che segue di essere stampato a schermo.
             ob_start();
+            //Includo il file che esegue il login.
             include('login.php');
+            //Metodo che torna a permette di stampare tutto quello che segue.
             ob_end_clean();
             //Stampo il bottone per il logout se l'utente ha effettuato il login.
             if (isset($_SESSION['loggedin'])) :
@@ -102,6 +109,7 @@
           <!--Section heading-->
           <?php
           ob_start();
+          //Includo il file che esegue il login.
           include('login.php');
           ob_end_clean();
           //Se l'utente esegue il login cambio il messaggio di benvenuto.
@@ -110,9 +118,10 @@
             <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso. Cerca un alloggio</h2>
           <?php
             ob_start();
+            //Includo il file che esegue la registrazione.
             include('signup.php');
             ob_end_clean();
-            //Se l'utente si registra cambio il messaggio di benvenuto.
+          //Se l'utente si registra cambio il messaggio di benvenuto.
           elseif (isset($_SESSION['signedup'])) :
             ?>
             <h2 class="h1 text-center mb-5">Benvenuto <?php echo $_SESSION['name']; ?>, hai effettuato correttamente la registrazione. Cerca un alloggio</h2>
@@ -138,11 +147,19 @@
                           <h3>Filtri</h3>
                           <div class="form-group">
                             <label for="tipologia">Tipologia</label>
-                            <select class="form-control" name="tipologia" onchange="this.form.submit()">
-                              <option value="" selected disabled>Qualsiasi</option>
-                              <option value="Albergo">Albergo</option>
-                              <option value="Bed & Breakfast">Bed & Breakfast</option>
-                              <option value="Camping">Camping</option>
+                            <select class="form-control" name="tipologia" id="selectTipologia" onchange="this.form.submit()">
+                              <option value="Qualsiasi" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Qualsiasi") {
+                                                          echo "selected";
+                                                        }  ?>>Qualsiasi</option>
+                              <option value="Albergo" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Albergo") {
+                                                        echo "selected";
+                                                      } ?>>Albergo</option>
+                              <option value="Bed & Breakfast" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Bed & Breakfast") {
+                                                                echo "selected";
+                                                              } ?>>Bed & Breakfast</option>
+                              <option value="Camping" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Camping") {
+                                                        echo "selected";
+                                                      } ?>>Camping</option>
                             </select>
                           </div>
                           <div class="form-group">
@@ -172,11 +189,15 @@
     <?php
 
     //Prendo il valore del filtro della tipologia.
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
-      $value = $_POST["tipologia"];
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      //Imposto la tipologia selezionata in una variabile se la tipologia non è "Qualsiasi".
+      if ($_POST["tipologia"] != "Qualsiasi") {
+        $value = $_POST["tipologia"];
+      }
     }
 
     ob_start();
+    //Includo il file che esegue la connessione al database.
     include('server.php');
     ob_end_clean();
     //Preparo la query per prendere l'id più grande così da sapere il numero di alloggi da stampare.
@@ -184,29 +205,32 @@
     $stmt = $db->prepare($get_max_id);
     $stmt->execute();
     $max_id = implode($stmt->fetch(PDO::FETCH_ASSOC));
-    //Ciclo che viene eseguito in base al numero di alloggi presenti che stampa gli alloggi. 
-    for ($i = 1; $i < $max_id; $i++) {
+    //Ciclo che viene eseguito in base al numero di alloggi presenti e che stampa gli alloggi. 
+    for ($i = 1; $i < $max_id + 1; $i++) {
       //Se viene utiilizzato un filtro per la tipologia utilizzo una certa query.
-      if(isset($value)){
+      if (isset($value)) {
         $accomodation_query = "SELECT id FROM alloggio WHERE id = $i AND nome_tipologia = '$value' LIMIT 1";
         $stmt = $db->prepare($accomodation_query);
         $stmt->execute();
-        $id = implode($stmt->fetch(PDO::FETCH_ASSOC));
-        if($id = $i){
-          $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+        //Se eseguendo la query viene trovata una riga, prepare una nuova query.
+        if ($stmt->rowCount() > 0) {
+          $id = implode($stmt->fetch(PDO::FETCH_ASSOC));
+          $accomodation_query = "SELECT * FROM alloggio WHERE id = $id LIMIT 1";
         }
-        else{
-          break;
+        //Altrimenti interrompo la corrente iterazione e passo alla prossima.
+        else {
+          continue;
         }
       }
       //Altrimenti uso la query di "default".
-      else{
+      else {
         $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
       }
       $stmt = $db->prepare($accomodation_query);
       //Eseguo la query.
       $stmt->execute();
       $row = $stmt->fetch();
+      //Salvo alcune variabili utili.
       $nome = $row["nome"];
       $indirizzo = $row["indirizzo"];
       $link_immagine = $row["link_immagine"];
@@ -229,7 +253,10 @@
                   <h3 class="mb-3 font-weight-bold dark-grey-text">
                     <strong>' . $nome . '</strong>
                   </h3>
-                  <p class="grey-text">' . $indirizzo . '</p>
+                  <p>
+                    <strong>' . $indirizzo . '</strong>
+                  </p>
+                    <p class="grey-text">' . $citta . ', ' . $regione . '</p>
                   <a href="#" target="_blank" class="btn btn-primary btn-md">Mostra dettagli
                     <i class="fas fa-play ml-2"></i>
                   </a>

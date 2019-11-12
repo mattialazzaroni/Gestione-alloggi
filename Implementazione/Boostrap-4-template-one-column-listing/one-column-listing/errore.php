@@ -2,6 +2,7 @@
 
 ?>
 
+<!-- Pagina che viene mostrata quando l'utente inserisce un url non esistente -->
 <!DOCTYPE html>
 <html>
 
@@ -22,9 +23,10 @@
 
 <body>
 
+	<!-- Contenuto visivo della pagina -->
 	<article class="card-body mx-auto" style="max-width: 450px;">
         <h4 class="card-title mt-3 text-center">Errore!</h4>
-        <p class="text-center">Non hai il permesso di accedere a questa pagina.</p>
+        <p class="text-center">Questa pagina non esite oppure non hai il permesso per accederci.</p>
 		<form action="index.php">
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary btn-block"><a href="index.php"></a> Torna alla home </button>

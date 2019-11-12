@@ -2,6 +2,7 @@
 
 ?>
 
+<!-- Pagina che viene mostrata quando l'utente si è registrato e deve verificare il suo account -->
 <!DOCTYPE html>
 <html>
 
@@ -31,6 +32,7 @@
 
 <body class="container-fluid">
 
+    <!-- Contenuto visivo della pagina -->
     <article class="card-body mx-auto" style="max-width: 450px;">
         <h2 class="card-title mt-3 text-center">Il tuo account è stato creato!</h2>
         <p class="text-center">Sei pregato di verificarlo cliccando il link di attivazione che ti è stato mandato per email.</p>

@@ -80,6 +80,7 @@
 
     </header>
 
+    <!-- Contenuto visivo della pagina -->
     <article class="card-body mx-auto" style="max-width: 450px; margin-top:10%;">
         <h4 class="card-title mt-3 text-center">Benvenuto!</h4>
         <p class="text-center">In questa pagina puoi caricare le disponibilità delle strutture e gestire i clienti che hanno riservato gli alloggi.</p>

@@ -1,20 +1,18 @@
 <?php
+//Includo il file che esegue la connessione al database.
 include('server.php');
 
+//Creo le variabili per l'email e la password.
 $email = '';
 $password = '';
 
-
+//Se il form di login viene confermato dall'utente.
 if (isset($_POST['login_user'])) {
-	$email = $_POST['email'];
-	$password = $_POST['password'];
-}
-
-
-if (isset($_POST['login_user'])) {
+	//Imposto le variabili con i dati dell'utente.
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 
+	//Preparo dei messaggi di errori se l'utente lascia dei campi vuoti.
 	if (empty($email)) {
 		array_push($errors, "L'email è richiesta");
 	}
@@ -22,28 +20,34 @@ if (isset($_POST['login_user'])) {
 		array_push($errors, "La password è richiesta");
 	}
 
+	//Se non ci sono errori.
 	if (count($errors) == 0) {
+		//Preparo la query.
 		$query = "SELECT * FROM utente WHERE email=:email";
 		if ($stmt = $db->prepare($query)) {
 			$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
 			$param_email = trim($email);
 			if ($stmt->execute()) {
+				//Se la query ritorna un risultato.
 				if ($stmt->rowCount() == 1) {
 					if ($row = $stmt->fetch()) {
 						$email = $row["email"];
 						$hashed_password = $row["password_utente"];
-						echo $hashed_password;
-						echo $password;
+						//Se la password inserita dall'utente coincide con la password hashata presente nel db e legata a quell'email.
 						if (password_verify($password, $hashed_password)) {
+							//Imposto delle variabili session e sposto l'utente alla homepage.
 							$_SESSION["name"] = $row["nome"];
 							$_SESSION["loggedin"] = true;
 							header('location: index.php');
-						} else {
+						}
+						//Altrimenti indico all'utente che la password inserita è errata.
+						else {
 							array_push($errors, "La password che ha inserito non è corretta");
 						}
 					} else {
 						array_push($errors, "Ops! Qualcosa è andato storto");
 					}
+				//Altrimenti stampo un errore.
 				} else {
 					array_push($errors, "Nessun utente trovato con questa email");
 				}
@@ -75,6 +79,7 @@ if (isset($_POST['login_user'])) {
 
 <body>
 
+	<!-- Contenuto visivo della pagina con form di login -->
 	<article class="card-body mx-auto" style="max-width: 450px;">
 		<h4 class="card-title mt-3 text-center">Accedi al tuo account</h4>
 		<form method="post" action="login.php">
@@ -91,6 +96,7 @@ if (isset($_POST['login_user'])) {
 				<input name="password" class="form-control" placeholder="Inserisci la tua password" type="password" value="<?php echo $password; ?>">
 			</div> <!-- form-group// -->
 
+			<!-- Stampa degli errori -->
 			<?php if (count($errors) > 0) : ?>
 				<div class="error">
 					<?php foreach ($errors as $error) : ?>
