@@ -31,7 +31,7 @@ include('server.php');
         $email = $_GET['email']; // Imposto l'email
         $hash = $_GET['hash']; // Imposto l'hash
         //Preparo la query
-        $search = $db->prepare("SELECT email, hash, active FROM utente WHERE email=:email AND hash=:hash AND active='0'");
+        $search = $db->prepare("SELECT email, hash, is_active FROM utente WHERE email=:email AND hash=:hash AND is_active='0'");
         $search->bindParam(":email", $email, PDO::PARAM_STR);
         $search->bindParam(":hash", $hash, PDO::PARAM_STR);
         $search->execute();
@@ -39,7 +39,7 @@ include('server.php');
 
         //Nel caso che la query produce un risultato, modifico l'active dell'utente nel db e stampo un messaggio di riuscita all'utente.
         if ($match > 0) {
-            $update = $db->prepare("UPDATE utente SET active='1' WHERE email='" . $email . "' AND hash='" . $hash . "' AND active='0'");
+            $update = $db->prepare("UPDATE utente SET is_active='1' WHERE email='" . $email . "' AND hash='" . $hash . "' AND is_active='0'");
             $update->execute();
             echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">';
             echo '<br><div style="font-size:20px;"><b>Congratulazioni!</b><br> Il tuo account è stato attivato, ora puoi fare il login.</div><br>';

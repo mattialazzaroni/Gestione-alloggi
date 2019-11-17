@@ -1,5 +1,4 @@
-use gestione_alloggi;
-/*use efof_i16lazmat;*/
+use efof_i16lazmat;
 
 delete from alloggio;
 delete from tipologia;

@@ -1,4 +1,0 @@
-Prima di caricare i file:
-
--cambiare il file "credenzialiDatabase.php" (commentare il codice per lavorare in locale e scommentare quello per lavorare online)
--cambiare il file "emailBody.php" (commentare il codice per lavorare in locale e scommentare quello per lavorare online)  

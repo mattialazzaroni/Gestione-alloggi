@@ -10,7 +10,7 @@ if(!isset($errors)){
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "gestione_alloggi";
+$database = "efof_i16lazmat";
 
 //Credenziali per lavorare online.
 /*

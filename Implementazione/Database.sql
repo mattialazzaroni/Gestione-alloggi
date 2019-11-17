@@ -1,6 +1,6 @@
-create database gestione_alloggi;
+create database if not exists efof_i16lazmat;
 
-use gestione_alloggi;
+use efof_i16lazmat;
 
 create table utente(
 	email varchar(30) primary key, 
@@ -9,7 +9,7 @@ create table utente(
     password_utente varchar(255) not null,
     n_telefono varchar(20) not null,
     hash varchar(255) not null,
-    active int(1) default 0
+    is_active int(1) default 0
 );
 
 create table amministratore_gerente(
@@ -19,7 +19,7 @@ create table amministratore_gerente(
     password_admin_gerente varchar(255) not null,
     n_telefono varchar(20) not null,
     hash varchar(255) not null,
-    active int(1) default 0
+    is_active int(1) default 0
 );
 
 create table amministratore(

@@ -58,16 +58,6 @@
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-            <li class="nav-item">
-              <a href="signup.php" class="nav-link border border-light rounded waves-effect">
-                <i class="fas fa-user-plus"></i>Registrati
-              </a>
-            </li>&nbsp;
-            <li class="nav-item">
-              <a href="login.php" class="nav-link border border-light rounded waves-effect">
-                <i class="fas fa-sign-in-alt"></i>Login
-              </a>
-            </li>&nbsp;
             <?php
             //Imposto il charset.
             header("Content-Type: text/html; charset=ISO-8859-1");
@@ -78,6 +68,20 @@
             //Metodo che torna a permette di stampare tutto quello che segue.
             ob_end_clean();
             //Stampo il bottone per il logout se l'utente ha effettuato il login.
+            if (!isset($_SESSION['loggedin'])) :
+              ?>
+            <li class="nav-item">
+              <a href="signup.php" class="nav-link border border-light rounded waves-effect">
+                <i class="fas fa-user-plus"></i>Registrati
+              </a>
+            </li>&nbsp;
+            <li class="nav-item">
+              <a href="login.php" class="nav-link border border-light rounded waves-effect">
+                <i class="fas fa-sign-in-alt"></i>Login
+              </a>
+            </li>&nbsp;
+            <?php endif; ?>
+            <?php
             if (isset($_SESSION['loggedin'])) :
               ?>
               <li class="nav-item">
@@ -116,15 +120,6 @@
           if (isset($_SESSION['loggedin'])) :
             ?>
             <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso. Cerca un alloggio</h2>
-          <?php
-            ob_start();
-            //Includo il file che esegue la registrazione.
-            include('signup.php');
-            ob_end_clean();
-          //Se l'utente si registra cambio il messaggio di benvenuto.
-          elseif (isset($_SESSION['signedup'])) :
-            ?>
-            <h2 class="h1 text-center mb-5">Benvenuto <?php echo $_SESSION['name']; ?>, hai effettuato correttamente la registrazione. Cerca un alloggio</h2>
           <?php else : ?>
             <h2 class="h1 text-center mb-5">Cerca un alloggio </h2>
           <?php endif; ?>
@@ -147,7 +142,7 @@
                           <h3>Filtri</h3>
                           <div class="form-group">
                             <label for="tipologia">Tipologia</label>
-                            <select class="form-control" name="tipologia" id="selectTipologia" onchange="this.form.submit()">
+                            <select class="form-control" name="tipologia" id="selectTipologia">
                               <option value="Qualsiasi" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Qualsiasi") {
                                                           echo "selected";
                                                         }  ?>>Qualsiasi</option>
@@ -174,10 +169,11 @@
                             <label for="contain">Nome gerente della struttura</label>
                             <input class="form-control" type="text" />
                           </div>
+                          <button type="button" class="btn btn-primary applica-filtro float-right">Applica</button>
                         </form>
                       </div>
                     </div>
-                    <button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    <button type="button" class="btn btn-primary cerca" onclick="this.form.submit()"><i class="fas fa-search"></i></button>
                   </div>
                 </div>
               </div>
