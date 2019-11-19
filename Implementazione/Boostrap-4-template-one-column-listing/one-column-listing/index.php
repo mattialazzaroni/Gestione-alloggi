@@ -159,15 +159,15 @@
                           </div>
                           <div class="form-group">
                             <label for="contain">Regione</label>
-                            <input class="form-control" type="text" />
+                            <input class="form-control" name="regione" type="text" />
                           </div>
                           <div class="form-group">
                             <label for="contain">Citt&#224;</label>
-                            <input class="form-control" type="text" />
+                            <input class="form-control" name="citta" type="text" />
                           </div>
                           <div class="form-group">
                             <label for="contain">Nome gerente della struttura</label>
-                            <input class="form-control" type="text" />
+                            <input class="form-control" name="nome_gerente" type="text" />
                           </div>
                           <button type="button" class="btn btn-primary applica-filtro float-right">Applica</button>
                         </form>
@@ -188,7 +188,16 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       //Imposto la tipologia selezionata in una variabile se la tipologia non è "Qualsiasi".
       if ($_POST["tipologia"] != "Qualsiasi") {
-        $value = $_POST["tipologia"];
+        $tipologia = $_POST["tipologia"];
+      }
+      if (isset($_POST["regione"])) {
+        $regione = $_POST["regione"];
+      }
+      if (isset($_POST["citta"])) {
+        $citta = $_POST["citta"];
+      }
+      if (isset($_POST["nome_gerente"])) {
+        $nome_gerente = $_POST["nome_gerente"];
       }
     }
 
@@ -204,8 +213,24 @@
     //Ciclo che viene eseguito in base al numero di alloggi presenti e che stampa gli alloggi. 
     for ($i = 1; $i < $max_id + 1; $i++) {
       //Se viene utiilizzato un filtro per la tipologia utilizzo una certa query.
-      if (isset($value)) {
-        $accomodation_query = "SELECT id FROM alloggio WHERE id = $i AND nome_tipologia = '$value' LIMIT 1";
+      if (isset($tipologia)) {
+        if (isset($regione)) {
+          if (isset($citta)) {
+            if (isset($nome_gerente)) {
+
+            }
+            else{
+              continue;
+            }
+          }
+          else{
+            continue;
+          }
+        }
+        else{
+          continue;
+        }
+        $accomodation_query = "SELECT id FROM alloggio WHERE id = $i AND nome_tipologia = '$tipologia' LIMIT 1";
         $stmt = $db->prepare($accomodation_query);
         $stmt->execute();
         //Se eseguendo la query viene trovata una riga, prepare una nuova query.
