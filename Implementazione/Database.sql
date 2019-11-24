@@ -14,7 +14,7 @@ create table utente(
 
 create table amministratore_gerente(
 	email varchar(30) primary key, 
-    nome varchar(30) not null,
+    nome varchar(30) not null unique,
     cognome varchar(30) not null,
     password_admin_gerente varchar(255) not null,
     n_telefono varchar(20) not null,

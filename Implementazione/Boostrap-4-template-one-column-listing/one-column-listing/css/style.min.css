@@ -62,3 +62,11 @@ option[value='nessuno'][disabled] {
     background: #EDEDED; /* Add a background color to our status message   */
     border: 1px solid #DFDFDF; /* Add a border arround our status message   */
 }
+
+#formCerca{
+    display: contents;
+}
+
+#applyCSS .dropdown.dropdown-lg {
+    display: -webkit-inline-box!important;
+}

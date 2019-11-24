@@ -97,7 +97,7 @@ if (isset($_POST['reg_user'])) {
 
 					//Definisco la query che inserisce l'utente.
 					$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
-              VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
+              		VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
 
 					//Preparo la query.
 					if ($stmt = $db->prepare($query)) {
@@ -142,8 +142,35 @@ if (isset($_POST['reg_user'])) {
 							// Content
 							$mail->CharSet = "UTF-8";
 							$mail->Subject = 'Conferma la tua registrazione';
-							//Includo il file contenente il corpo dell'email.
-							require 'emailBody.php';
+
+							//Controllo se sto lavorando in locale.
+							if ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || $_SERVER["SERVER_NAME"] == 'localhost') {
+								//Body per lavorare in locale.
+								$body = "Grazie per esserti registrato! <br>
+								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
+
+								------------------------ <br>
+								Email: $email <br>
+								Password: $pointed_password <br>
+								------------------------ <br>
+
+								Fai clic su questo link per attivare il tuo account: <br>
+								<a href='http://localhost/verify.php?email=$email&hash=$hash'>http://localhost/verify.php?email=$email&hash=$hash</a>";
+							} 
+							//Altrimenti sono online.
+							else {
+								//Body per lavorare online.    
+								$body = "Grazie per esserti registrato! <br>
+								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
+
+								------------------------ <br>
+								Email: $email <br>
+								Password: $pointed_password <br>
+								------------------------ <br>
+
+								Fai clic su questo link per attivare il tuo account: <br>
+								<a href='http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash'>http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash</a>";
+							}
 							$mail->Body = $body;
 							$mail->isHTML(true);
 
@@ -191,7 +218,7 @@ if (isset($_POST['reg_user'])) {
 </head>
 
 <body>
-	
+
 	<!-- Contenuto visivo della pagina con form di registrazione -->
 	<article class="card-body mx-auto" style="max-width: 450px;">
 		<h4 class="card-title mt-3 text-center">Crea il tuo account</h4>
@@ -455,7 +482,7 @@ if (isset($_POST['reg_user'])) {
 				<select name="user_type" class="form-control">
 					<option value="" disabled>Seleziona il tipo di utente</option>
 					<option value="utente" selected>Utente base</option>
-					<option value="amministratore">Amministratore gerente</option>
+					<option value="amministratore" disabled>Amministratore gerente</option>
 				</select>
 			</div> <!-- form-group end.// -->
 

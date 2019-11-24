@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="00.10.00 26.11.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Riserva subito un alloggio!</title>
   <!-- Font Awesome -->
@@ -67,21 +67,21 @@
             include('login.php');
             //Metodo che torna a permette di stampare tutto quello che segue.
             ob_end_clean();
-            //Stampo il bottone per il logout se l'utente ha effettuato il login.
             if (!isset($_SESSION['loggedin'])) :
               ?>
-            <li class="nav-item">
-              <a href="signup.php" class="nav-link border border-light rounded waves-effect">
-                <i class="fas fa-user-plus"></i>Registrati
-              </a>
-            </li>&nbsp;
-            <li class="nav-item">
-              <a href="login.php" class="nav-link border border-light rounded waves-effect">
-                <i class="fas fa-sign-in-alt"></i>Login
-              </a>
-            </li>&nbsp;
+              <li class="nav-item">
+                <a href="signup.php" class="nav-link border border-light rounded waves-effect">
+                  <i class="fas fa-user-plus"></i>Registrati
+                </a>
+              </li>&nbsp;
+              <li class="nav-item">
+                <a href="login.php" class="nav-link border border-light rounded waves-effect">
+                  <i class="fas fa-sign-in-alt"></i>Login
+                </a>
+              </li>&nbsp;
             <?php endif; ?>
             <?php
+            //Stampo il bottone per il logout se l'utente ha effettuato il login.
             if (isset($_SESSION['loggedin'])) :
               ?>
               <li class="nav-item">
@@ -132,48 +132,66 @@
           <div class="row">
             <div class="col-md-12">
               <div class="input-group" id="adv-search">
-                <input type="text" class="form-control" placeholder="Cerca un alloggio" />
                 <div class="input-group-btn">
                   <div class="btn-group" role="group">
-                    <div class="dropdown dropdown-lg">
-                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                    <div class="dropdown dropdown-lg" >
+                      <form action="" role="form" method="post" id="formCerca">
+                        <input type="text" name="nome" class="form-control" size="4.5em" <?php if (isset($_POST['nome'])) {
+                                                                                      echo 'value="' . $_POST['nome'] . '"';
+                                                                                    } else if (isset($_SESSION['nome'])) {
+                                                                                      echo 'value="' . $_SESSION['nome'] . '"';
+                                                                                    } ?> placeholder="Cerca un alloggio" />
+                        <button name="cerca" type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                      </form>
+                      <button type="button" class="btn btn-default dropdown-toggle filtro" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                       <div class="dropdown-menu dropdown-menu-right" role="menu">
                         <form class="form-horizontal" action="index.php" role="form" method="post">
                           <h3>Filtri</h3>
                           <div class="form-group">
                             <label for="tipologia">Tipologia</label>
                             <select class="form-control" name="tipologia" id="selectTipologia">
-                              <option value="Qualsiasi" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Qualsiasi") {
+                              <option value="Qualsiasi" <?php if ((isset($_POST['tipologia']) && $_POST['tipologia'] == "Qualsiasi") || (isset($_SESSION['filtro_tipologia']) && $_SESSION['filtro_tipologia'] == "Qualsiasi")) {
                                                           echo "selected";
-                                                        }  ?>>Qualsiasi</option>
-                              <option value="Albergo" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Albergo") {
+                                                        } ?>>Qualsiasi</option>
+                              <option value="Albergo" <?php if ((isset($_POST['tipologia']) && $_POST['tipologia'] == "Albergo") || (isset($_SESSION['filtro_tipologia']) && $_SESSION['filtro_tipologia'] == "Albergo")) {
                                                         echo "selected";
                                                       } ?>>Albergo</option>
-                              <option value="Bed & Breakfast" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Bed & Breakfast") {
+                              <option value="Bed & Breakfast" <?php if ((isset($_POST['tipologia']) && $_POST['tipologia'] == "Bed & Breakfast") || (isset($_SESSION['filtro_tipologia'])  && $_SESSION['filtro_tipologia'] == "Bed & Breakfast")) {
                                                                 echo "selected";
                                                               } ?>>Bed & Breakfast</option>
-                              <option value="Camping" <?php if (isset($_POST['tipologia']) && $_POST['tipologia'] == "Camping") {
+                              <option value="Camping" <?php if ((isset($_POST['tipologia']) && $_POST['tipologia'] == "Camping") || (isset($_SESSION['filtro_tipologia']) && $_SESSION['filtro_tipologia'] == "Camping")) {
                                                         echo "selected";
                                                       } ?>>Camping</option>
                             </select>
                           </div>
                           <div class="form-group">
                             <label for="contain">Regione</label>
-                            <input class="form-control" name="regione" type="text" />
+                            <input class="form-control" name="regione" type="text" <?php if (isset($_POST['regione'])) {
+                                                                                      echo 'value="' . $_POST['regione'] . '"';
+                                                                                    } else if (isset($_SESSION['filtro_regione'])) {
+                                                                                      echo 'value="' . $_SESSION['filtro_regione'] . '"';
+                                                                                    } ?> />
                           </div>
                           <div class="form-group">
                             <label for="contain">Citt&#224;</label>
-                            <input class="form-control" name="citta" type="text" />
+                            <input class="form-control" name="citta" <?php if (isset($_POST['citta'])) {
+                                                                        echo 'value="' . $_POST['citta'] . '"';
+                                                                      } else if (isset($_SESSION['filtro_citta'])) {
+                                                                        echo 'value="' . $_SESSION['filtro_citta'] . '"';
+                                                                      } ?> type="text" />
                           </div>
                           <div class="form-group">
                             <label for="contain">Nome gerente della struttura</label>
-                            <input class="form-control" name="nome_gerente" type="text" />
+                            <input class="form-control" name="nome_gerente" <?php if (isset($_POST['nome_gerente'])) {
+                                                                              echo 'value="' . $_POST['nome_gerente'] . '"';
+                                                                            } else if (isset($_SESSION['filtro_nome_gerente'])) {
+                                                                              echo 'value="' . $_SESSION['filtro_nome_gerente'] . '"';
+                                                                            } ?> type="text" />
                           </div>
-                          <button type="button" class="btn btn-primary applica-filtro float-right">Applica</button>
+                          <button name="applica" type="submit" class="btn btn-primary applica-filtro float-right" onclick="this.form.submit()">Applica</button>
                         </form>
                       </div>
                     </div>
-                    <button type="button" class="btn btn-primary cerca" onclick="this.form.submit()"><i class="fas fa-search"></i></button>
                   </div>
                 </div>
               </div>
@@ -184,20 +202,49 @@
 
     <?php
 
-    //Prendo il valore del filtro della tipologia.
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //Se viene premuto il bottone applica.
+    if (isset($_POST['applica'])) {
       //Imposto la tipologia selezionata in una variabile se la tipologia non è "Qualsiasi".
       if ($_POST["tipologia"] != "Qualsiasi") {
-        $tipologia = $_POST["tipologia"];
+        $_SESSION['filtro_tipologia'] = $_POST["tipologia"];
       }
-      if (isset($_POST["regione"])) {
-        $regione = $_POST["regione"];
+      //Imposto la sessione a null se la tipologia selezionata dall'utente è "Qualsiasi".
+      else if ($_POST["tipologia"] == "Qualsiasi") {
+        $_SESSION['filtro_tipologia'] = null;
       }
-      if (isset($_POST["citta"])) {
-        $citta = $_POST["citta"];
+      //Imposto la regione in una variabile se viene inserita dall'utente.
+      if (!empty($_POST["regione"])) {
+        $_SESSION['filtro_regione'] = $_POST["regione"];
       }
-      if (isset($_POST["nome_gerente"])) {
-        $nome_gerente = $_POST["nome_gerente"];
+      //Imposto la sessione a null se l'utente non inserisce nessuna regione.
+      else if (empty($_POST["regione"])) {
+        $_SESSION['filtro_regione'] = null;
+      }
+      //Imposto la città in una variabile se viene inserita dall'utente.
+      if (!empty($_POST["citta"])) {
+        $_SESSION['filtro_citta'] = $_POST["citta"];
+      }
+      //Imposto la sessione a null se l'utente non inserisce nessuna città.
+      else if (empty($_POST["citta"])) {
+        $_SESSION['filtro_citta'] = null;
+      }
+      //Imposto il nome del gerente in una variabile se viene inserita dall'utente.
+      if (!empty($_POST["nome_gerente"])) {
+        $_SESSION['filtro_nome_gerente'] = $_POST["nome_gerente"];
+      }
+      //Imposto la sessione a null se l'utente non inserisce nessun nome.
+      else if (empty($_POST["nome_gerente"])) {
+        $_SESSION['filtro_nome_gerente'] = null;
+      }
+    }
+    if(isset($_POST['cerca'])){
+      //Imposto la città in una variabile se viene inserita dall'utente.
+      if (!empty($_POST["nome"])) {
+        $_SESSION['nome'] = $_POST["nome"];
+      }
+      //Imposto la sessione a null se l'utente non inserisce nessuna città.
+      else if (empty($_POST["nome"])) {
+        $_SESSION['nome'] = null;
       }
     }
 
@@ -212,38 +259,76 @@
     $max_id = implode($stmt->fetch(PDO::FETCH_ASSOC));
     //Ciclo che viene eseguito in base al numero di alloggi presenti e che stampa gli alloggi. 
     for ($i = 1; $i < $max_id + 1; $i++) {
-      //Se viene utiilizzato un filtro per la tipologia utilizzo una certa query.
-      if (isset($tipologia)) {
-        if (isset($regione)) {
-          if (isset($citta)) {
-            if (isset($nome_gerente)) {
-
-            }
-            else{
-              continue;
-            }
+      //Se viene cliccato il tasto di ricerca.
+      if (isset($_POST['cerca'])) {
+        //Variabile per la query filtrata.
+        $whereNome = "";
+        if (isset($_POST['nome']) && !empty($_POST['nome'])) {
+          $whereNome = "AND nome like '%" . $_POST['nome'] . "%' ";
+        }
+        //Se viene utiilizzato un filtro.
+        if (isset($_SESSION['filtro_tipologia']) || isset($_SESSION['filtro_regione']) || isset($_SESSION['filtro_citta']) || isset($_SESSION['filtro_nome_gerente']) || isset($whereNome)) {
+          $where = "";
+          //Se viene usato un filtro per la tipologia utilizzo una certa query.
+          if (isset($_SESSION['filtro_tipologia'])) {
+            $where = "AND nome_tipologia = '" . $_SESSION['filtro_tipologia'] . "' ";
           }
+          //Se viene usato un filtro per la regione utilizzo una certa query.
+          if (isset($_SESSION['filtro_regione'])) {
+            $where .= "AND regione LIKE '%" . $_SESSION['filtro_regione'] . "%' ";
+          }
+          //Se viene usato un filtro per la città utilizzo una certa query.
+          if (isset($_SESSION['filtro_citta'])) {
+            $where .= "AND citta LIKE '%" . $_SESSION['filtro_citta'] . "%' ";
+          }
+          //Se viene usato un filtro per il nome del gerente utilizzo una certa query.
+          if (isset($_SESSION['filtro_nome_gerente'])) {
+            //Query che prende l'email del gerente in base al nome inserito facendo una join
+            $get_nome_gerente = "SELECT alloggio.email_gerente FROM alloggio JOIN amministratore_gerente
+            ON alloggio.email_gerente = amministratore_gerente.email WHERE amministratore_gerente.nome LIKE '%" . $_SESSION['filtro_nome_gerente'] . "%' ";
+            $stmt = $db->prepare($get_nome_gerente);
+            //Eseguo la query.
+            $stmt->execute();
+            $row = $stmt->fetch();
+            $email_gerente = $row["email_gerente"];
+            $where .= "AND email_gerente = '" . $email_gerente . "' ";
+          }
+          //Controllo se è stato inserito anche il nome di un alloggio.
+          if(isset($whereNome)){
+            $accomodation_query = "SELECT id FROM alloggio WHERE id = $i $where $whereNome LIMIT 1";
+          }
+          //Altrimenti eseguo la query solo coi filtri senza nome.
           else{
+            $accomodation_query = "SELECT id FROM alloggio WHERE id = $i $where LIMIT 1";
+          }
+          
+          $stmt = $db->prepare($accomodation_query);
+          //Eseguo la query.
+          $stmt->execute();
+          //Se eseguendo la query viene trovata una riga, preparo una nuova query.
+          if ($stmt->rowCount() > 0) {
+            $id = implode($stmt->fetch(PDO::FETCH_ASSOC));
+            $accomodation_query = "SELECT * FROM alloggio WHERE id = $id LIMIT 1";
+          }
+          //Altrimenti interrompo la corrente iterazione e passo alla prossima.
+          else {
             continue;
           }
         }
-        else{
-          continue;
-        }
-        $accomodation_query = "SELECT id FROM alloggio WHERE id = $i AND nome_tipologia = '$tipologia' LIMIT 1";
-        $stmt = $db->prepare($accomodation_query);
-        $stmt->execute();
-        //Se eseguendo la query viene trovata una riga, prepare una nuova query.
-        if ($stmt->rowCount() > 0) {
-          $id = implode($stmt->fetch(PDO::FETCH_ASSOC));
-          $accomodation_query = "SELECT * FROM alloggio WHERE id = $id LIMIT 1";
-        }
-        //Altrimenti interrompo la corrente iterazione e passo alla prossima.
+        //Se non viene inserito nessun filtro, stampo tutti gli alloggi.
         else {
-          continue;
+          //Se viene inserito un nome di un alloggio.
+          if(isset($whereNome)){
+            $accomodation_query = "SELECT * FROM alloggio WHERE id = $i $whereNome LIMIT 1";
+            echo $accomodation_query;
+          }
+          //Se non viene inserito un nome.
+          else{
+            $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+          }
         }
       }
-      //Altrimenti uso la query di "default".
+      //Se non viene cliccato il bottone per cercare, stampo tutti gli alloggi.
       else {
         $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
       }
@@ -257,7 +342,6 @@
       $link_immagine = $row["link_immagine"];
       $regione = $row["regione"];
       $citta = $row["citta"];
-      $email_gerente = $row["email_gerente"];
       $nome_tipologia = $row["nome_tipologia"];
       //Stampo un alloggio.
       echo '<div class="row wow fadeIn">
@@ -286,48 +370,12 @@
               <hr class="mb-5">';
     }
 
+
+    //if (isset($_SESSION['no_data'])) {
+    //  echo "<p color='red'>Non &egrave stato trovato nessun alloggio. Controlla i filtri.</p>";
+    //}
+
     ?>
-
-
-    <!--Pagination-->
-    <nav class="d-flex justify-content-center wow fadeIn">
-      <ul class="pagination pg-blue">
-
-        <!--Arrow left-->
-        <li class="page-item disabled">
-          <a class="page-link" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-
-        <li class="page-item active">
-          <a class="page-link" href="#">1
-            <span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">4</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">5</a>
-        </li>
-
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-    <!--Pagination-->
 
     </section>
     <!--Section: Cards-->
@@ -359,7 +407,9 @@
 
     <!--Copyright-->
     <div class="footer-copyright py-3">
-      © 2019 Copyright:
+      &copy; <script>
+        document.write(new Date().getFullYear())
+      </script> Copyright:
       <a class="copyright" href="https://samtinfo.ch/i16lazmat/web" target="_blank"> Mattia Lazzaroni </a>
     </div>
     <!--/.Copyright-->

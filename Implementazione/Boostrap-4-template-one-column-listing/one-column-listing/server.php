@@ -4,7 +4,23 @@ session_start();
 
 //Dichiaro le variabili per potermi connettere al database.
 $errors = array();
-require 'credenzialiDatabase.php';
+
+//Controllo se sto lavorando in locale.
+if ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || $_SERVER["SERVER_NAME"] == 'localhost'){
+    //Credenziali per lavorare in locale.
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "efof_i16lazmat";
+}
+//Altrimenti sono online.
+else{
+    //Credenziali per lavorare online.
+    $servername = "efof.myd.infomaniak.com";
+    $username = "efof_i16lazmat";
+    $password = "Alloggi_Admin2019";
+    $database = "efof_i16lazmat";
+}
 
 //Provo a connettermi al database.
 try {
