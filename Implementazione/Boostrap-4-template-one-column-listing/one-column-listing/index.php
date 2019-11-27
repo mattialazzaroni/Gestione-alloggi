@@ -42,22 +42,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
           <!-- Left -->
-          <ul class="navbar-nav mr-auto">
+          <ul class="navbar-nav mr-auto" style="margin-bottom:5px;">
             <li class="nav-item active">
               <a class="nav-link waves-effect" href="#">Tutte le strutture
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="amministratore-gerente.php">Amministratore gerente</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="amministratore.php">Amministratore</a>
-            </li>
-          </ul>
-
-          <!-- Right -->
-          <ul class="navbar-nav nav-flex-icons">
             <?php
             //Imposto il charset.
             header("Content-Type: text/html; charset=ISO-8859-1");
@@ -67,6 +57,23 @@
             include('login.php');
             //Metodo che torna a permette di stampare tutto quello che segue.
             ob_end_clean();
+            if (isset($_SESSION['amministratore_gerente'])) :
+              ?>
+              <li class="nav-item">
+                <a class="nav-link waves-effect" href="amministratore-gerente.php">Amministratore gerente</a>
+              </li>
+              <?php endif; ?>
+            <?php
+            if (isset($_SESSION['amministratore'])) :
+              ?>
+              <li class="nav-item">
+                <a class="nav-link waves-effect" href="amministratore.php">Amministratore</a>
+              </li>
+            <?php endif; ?>
+          </ul>
+          <!-- Right -->
+          <ul class="navbar-nav nav-flex-icons">
+            <?php
             if (!isset($_SESSION['loggedin'])) :
               ?>
               <li class="nav-item">
@@ -112,14 +119,10 @@
         <div class="wow fadeIn">
           <!--Section heading-->
           <?php
-          ob_start();
-          //Includo il file che esegue il login.
-          include('login.php');
-          ob_end_clean();
           //Se l'utente esegue il login cambio il messaggio di benvenuto.
           if (isset($_SESSION['loggedin'])) :
             ?>
-            <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso. Cerca un alloggio</h2>
+            <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso come <?php echo $_SESSION['type']; ?>. Cerca un alloggio</h2>
           <?php else : ?>
             <h2 class="h1 text-center mb-5">Cerca un alloggio </h2>
           <?php endif; ?>
@@ -134,18 +137,18 @@
               <div class="input-group" id="adv-search">
                 <div class="input-group-btn">
                   <div class="btn-group" role="group">
-                    <div class="dropdown dropdown-lg" >
-                      <form action="" role="form" method="post" id="formCerca">
-                        <input type="text" name="nome" class="form-control" size="4.5em" <?php if (isset($_POST['nome'])) {
-                                                                                      echo 'value="' . $_POST['nome'] . '"';
-                                                                                    } else if (isset($_SESSION['nome'])) {
-                                                                                      echo 'value="' . $_SESSION['nome'] . '"';
-                                                                                    } ?> placeholder="Cerca un alloggio" />
+                    <div class="dropdown dropdown-lg">
+                      <form action="" role="form" method="post" id="formCerca" onsubmit="">
+                        <input type="text" id="nome" name="nome" class="form-control" size="4.5em" <?php if (isset($_SESSION['nome'])) {
+                                                                                                      echo 'value="' . $_SESSION['nome'] . '"';
+                                                                                                    } else if (isset($_POST['nome'])) {
+                                                                                                      echo 'value="' . $_POST['nome'] . '"';
+                                                                                                    } ?> placeholder="Cerca un alloggio" />
                         <button name="cerca" type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                       </form>
                       <button type="button" class="btn btn-default dropdown-toggle filtro" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                       <div class="dropdown-menu dropdown-menu-right" role="menu">
-                        <form class="form-horizontal" action="index.php" role="form" method="post">
+                        <form id="filtro" class="form-horizontal" action="index.php" role="form" method="post">
                           <h3>Filtri</h3>
                           <div class="form-group">
                             <label for="tipologia">Tipologia</label>
@@ -237,7 +240,7 @@
         $_SESSION['filtro_nome_gerente'] = null;
       }
     }
-    if(isset($_POST['cerca'])){
+    if (isset($_POST['cerca'])) {
       //Imposto la città in una variabile se viene inserita dall'utente.
       if (!empty($_POST["nome"])) {
         $_SESSION['nome'] = $_POST["nome"];
@@ -294,14 +297,14 @@
             $where .= "AND email_gerente = '" . $email_gerente . "' ";
           }
           //Controllo se è stato inserito anche il nome di un alloggio.
-          if(isset($whereNome)){
+          if (isset($whereNome)) {
             $accomodation_query = "SELECT id FROM alloggio WHERE id = $i $where $whereNome LIMIT 1";
           }
           //Altrimenti eseguo la query solo coi filtri senza nome.
-          else{
+          else {
             $accomodation_query = "SELECT id FROM alloggio WHERE id = $i $where LIMIT 1";
           }
-          
+
           $stmt = $db->prepare($accomodation_query);
           //Eseguo la query.
           $stmt->execute();
@@ -318,12 +321,12 @@
         //Se non viene inserito nessun filtro, stampo tutti gli alloggi.
         else {
           //Se viene inserito un nome di un alloggio.
-          if(isset($whereNome)){
+          if (isset($whereNome)) {
             $accomodation_query = "SELECT * FROM alloggio WHERE id = $i $whereNome LIMIT 1";
             echo $accomodation_query;
           }
           //Se non viene inserito un nome.
-          else{
+          else {
             $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
           }
         }
@@ -343,6 +346,7 @@
       $regione = $row["regione"];
       $citta = $row["citta"];
       $nome_tipologia = $row["nome_tipologia"];
+      $_SESSION["mappa"] = $row["link_mappa"];
       //Stampo un alloggio.
       echo '<div class="row wow fadeIn">
                 <div class="col-lg-5 col-xl-4 mb-4">

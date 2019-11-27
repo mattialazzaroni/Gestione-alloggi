@@ -22,6 +22,16 @@
 
 <body>
 
+    <?php 
+    header("Content-Type: text/html; charset=ISO-8859-1");
+    ob_start();
+    //Includo il file che esegue il login.
+    include('index.php');
+    //Metodo che torna a permette di stampare tutto quello che segue.
+    ob_end_clean();
+    if (isset($_SESSION['amministratore'])) :
+    ?>
+
     <!--Main Navigation-->
     <header>
 
@@ -43,31 +53,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <!-- Left -->
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto" style="margin-bottom:5px;">
                         <li class="nav-item">
                             <a class="nav-link waves-effect" href="index.php">Tutte le strutture
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="amministratore-gerente.php">Amministratore gerente</a>
-                        </li>
                         <li class="nav-item active">
                             <a class="nav-link waves-effect" href="#">Amministratore
                                 <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <!-- Right -->
-                    <ul class="navbar-nav nav-flex-icons">
-                        <li class="nav-item">
-                            <a href="signup.php" class="nav-link border border-light rounded waves-effect">
-                                <i class="fas fa-user-plus"></i>Registrati
-                            </a>
-                        </li>&nbsp;
-                        <li class="nav-item">
-                            <a href="login.php" class="nav-link border border-light rounded waves-effect">
-                                <i class="fas fa-sign-in-alt"></i>Login
                             </a>
                         </li>
                     </ul>
@@ -93,6 +86,20 @@
             </div> <!-- form-group// -->
         </form>
     </article>
+
+
+    <?php else : ?>
+        <!-- Contenuto visivo della pagina -->
+	<article class="card-body mx-auto" style="max-width: 450px;">
+        <h4 class="card-title mt-3 text-center">Errore!</h4>
+        <p class="text-center">Non hai il permesso di accedere a questa pagina.</p>
+		<form action="index.php">
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary btn-block"><a href="index.php"></a> Torna alla home </button>
+            </div> <!-- form-group// -->
+		</form>
+	</article>
+    <?php endif; ?>
 
     <!-- SCRIPTS -->
     <!-- JQuery -->

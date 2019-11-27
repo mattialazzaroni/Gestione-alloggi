@@ -76,77 +76,93 @@ if (isset($_POST['reg_user'])) {
 
 	//Se non ci sono errori si procede alla preparazione della query.
 	if (count($errors) == 0) {
-		//Query per controllare che un utente non esiste gà con quella email.
+		//Query per controllare che un utente non esista già con quella email.
 		$user_check_query = "SELECT * FROM utente WHERE email=:email LIMIT 1";
-		//Preparo la query.
-		if ($stmt = $db->prepare($user_check_query)) {
-			$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
-			$param_email = trim($email);
-			//Eseguo la query.
-			if ($stmt->execute()) {
-				//Se la query ritorna una riga stampo un errore.
-				if ($stmt->rowCount() == 1) {
-					array_push($errors, "La seguente email è già in uso");
-					//Altrimenti procedo
-				} else {
-					$email = trim($email);
-					unset($stmt);
+		//Query per controllare che un amministratore non esista già con quella email.
+		$admin_check_query = "SELECT * FROM amministratore WHERE email=:email LIMIT 1";
+		//Query per controllare che un amministratore gerente non esista già con quella email.
+		$admin_manager_check_query = "SELECT * FROM amministratore_gerente WHERE email=:email LIMIT 1";
 
-					//Creo una hash univoca in base all'orario corrente espresso in numero di secondi dall'epoca di Unix.
-					$hash = md5(time());
+		//Preparo le query.
+		$stmt1 = $db->prepare($user_check_query);
+		$stmt2 = $db->prepare($admin_check_query);
+		$stmt3 = $db->prepare($admin_manager_check_query);
+		
+		//Associo i parametri alla variabile contenente l'email.
+		$stmt1->bindParam(":email", $param_email, PDO::PARAM_STR);
+		$stmt2->bindParam(":email", $param_email, PDO::PARAM_STR);
+		$stmt3->bindParam(":email", $param_email, PDO::PARAM_STR);
+		$param_email = trim($email);
+		//Eseguo la query del controllo degli utente.
+		$stmt1->execute();
+		//Eseguo la query del controllo degli amministratore.
+		$stmt2->execute();
+		//Eseguo la query del controllo degli amministratore gerente.
+		$stmt3->execute();
+		//Se la query trova un utente, un amministratore o un amministratore gerente con quell'email stampo un errore.
+		if ($stmt1->rowCount() == 1 || $stmt2->rowCount() == 1 || $stmt3->rowCount() == 1) {
+			array_push($errors, "La seguente email è già in uso");
+		} 
+		//Altrimenti procedo.
+		else {
+			$email = trim($email);
+			unset($stmt);
 
-					//Definisco la query che inserisce l'utente.
-					$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
+			//Creo una hash univoca in base all'orario corrente espresso in numero di secondi dall'epoca di Unix.
+			$hash = md5(time());
+
+			//Definisco la query che inserisce l'utente.
+			$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
               		VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
 
-					//Preparo la query.
-					if ($stmt = $db->prepare($query)) {
-						$stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
-						$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
-						$param_password = password_hash($password_1, PASSWORD_DEFAULT);
-						$param_email = trim($email);
+			//Preparo la query.
+			if ($stmt = $db->prepare($query)) {
+				$stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
+				$stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+				$param_password = password_hash($password_1, PASSWORD_DEFAULT);
+				$param_email = trim($email);
 
-						//Eseguo la query.
-						if ($stmt->execute()) {
-							$_SESSION['name'] = $name;
-							$_SESSION['signedup'] = true;
+				//Eseguo la query.
+				if ($stmt->execute()) {
+					$_SESSION['name'] = $name;
+					$_SESSION['signedup'] = true;
 
-							//Definisco la variabile che conterrà la password rappresentata con dei puntini.
-							$pointed_password = "";
-							//Prendo la lunghezza della password.
-							$password_length = strlen($password_1);
-							//Ciclo in base alla lunghezza della password.
-							for ($i = 0; $i < $password_length; $i++) {
-								//Assegno un puntino per ogni carattere della password alla variabile.
-								$pointed_password .= "*";
-							}
+					//Definisco la variabile che conterrà la password rappresentata con dei puntini.
+					$pointed_password = "";
+					//Prendo la lunghezza della password.
+					$password_length = strlen($password_1);
+					//Ciclo in base alla lunghezza della password.
+					for ($i = 0; $i < $password_length; $i++) {
+						//Assegno un puntino per ogni carattere della password alla variabile.
+						$pointed_password .= "*";
+					}
 
-							//Istanzio un nuovo oggetto PHPMailer.
-							$mail = new PHPMailer(true);
+					//Istanzio un nuovo oggetto PHPMailer.
+					$mail = new PHPMailer(true);
 
-							//Server settings                    // Enable verbose debug output
-							$mail->isSMTP();
-							$mail->SMTPDebug = 2;                                          // Send using SMTP
-							$mail->Host       = 'smtp.live.com';                    // Set the SMTP server to send through
-							$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-							$mail->Username   = 'gestionealloggi@hotmail.com';                     // SMTP username
-							$mail->Password   = 'Password&3';                               // 
-							$mail->SMTPSecure = 'tsl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-							$mail->Port       = 587;                                    // TCP port to connect to
+					//Server settings                    // Enable verbose debug output
+					$mail->isSMTP();
+					$mail->SMTPDebug = 2;                                          // Send using SMTP
+					$mail->Host       = 'smtp.live.com';                    // Set the SMTP server to send through
+					$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+					$mail->Username   = 'gestionealloggi@hotmail.com';                     // SMTP username
+					$mail->Password   = 'Password&3';                               // 
+					$mail->SMTPSecure = 'tsl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+					$mail->Port       = 587;                                    // TCP port to connect to
 
-							//Recipients
-							$mail->setFrom('gestionealloggi@hotmail.com', 'Gestione alloggi');
-							$mail->addAddress($email, $name . ' ' . $surname);              // Name is optional
-							$mail->addReplyTo('gestionealloggi@hotmail.com', 'Gestione alloggi');
+					//Recipients
+					$mail->setFrom('gestionealloggi@hotmail.com', 'Gestione alloggi');
+					$mail->addAddress($email, $name . ' ' . $surname);              // Name is optional
+					$mail->addReplyTo('gestionealloggi@hotmail.com', 'Gestione alloggi');
 
-							// Content
-							$mail->CharSet = "UTF-8";
-							$mail->Subject = 'Conferma la tua registrazione';
+					// Content
+					$mail->CharSet = "UTF-8";
+					$mail->Subject = 'Conferma la tua registrazione';
 
-							//Controllo se sto lavorando in locale.
-							if ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || $_SERVER["SERVER_NAME"] == 'localhost') {
-								//Body per lavorare in locale.
-								$body = "Grazie per esserti registrato! <br>
+					//Controllo se sto lavorando in locale.
+					if ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || $_SERVER["SERVER_NAME"] == 'localhost') {
+						//Body per lavorare in locale.
+						$body = "Grazie per esserti registrato! <br>
 								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
 
 								------------------------ <br>
@@ -156,11 +172,11 @@ if (isset($_POST['reg_user'])) {
 
 								Fai clic su questo link per attivare il tuo account: <br>
 								<a href='http://localhost/verify.php?email=$email&hash=$hash'>http://localhost/verify.php?email=$email&hash=$hash</a>";
-							} 
-							//Altrimenti sono online.
-							else {
-								//Body per lavorare online.    
-								$body = "Grazie per esserti registrato! <br>
+					}
+					//Altrimenti sono online.
+					else {
+						//Body per lavorare online.    
+						$body = "Grazie per esserti registrato! <br>
 								Il tuo account è stato creato, puoi accedere con le seguente credenziali dopo aver attivato l'account. <br>
 
 								------------------------ <br>
@@ -170,29 +186,25 @@ if (isset($_POST['reg_user'])) {
 
 								Fai clic su questo link per attivare il tuo account: <br>
 								<a href='http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash'>http://samtinfo.ch/gestionealloggi2019/verify.php?email=$email&hash=$hash</a>";
-							}
-							$mail->Body = $body;
-							$mail->isHTML(true);
-
-							//Mando l'email.
-							if (!$mail->send()) {
-								echo 'Mailer Error: ' . $mail->ErrorInfo;
-							}
-
-							unset($mail);
-							//Mi sposto ad un file che indice all'utente di controllare le sue email.
-							header("location: check-your-email.php");
-						} else {
-							array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
-						}
 					}
-					unset($stmt);
+					$mail->Body = $body;
+					$mail->isHTML(true);
+
+					//Mando l'email.
+					if (!$mail->send()) {
+						echo 'Mailer Error: ' . $mail->ErrorInfo;
+					}
+
+					unset($mail);
+					//Mi sposto ad un file che indice all'utente di controllare le sue email.
+					header("location: check-your-email.php");
+				} else {
+					array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi");
 				}
-				unset($db);
-			} else {
-				array_push($errors, "Ops! Qualcosa è andato storto. Riprova più tardi.");
 			}
+			unset($stmt);
 		}
+		unset($db);
 	}
 }
 

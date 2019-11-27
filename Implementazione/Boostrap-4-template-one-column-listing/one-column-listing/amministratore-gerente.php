@@ -22,6 +22,16 @@
 
 <body>
 
+    <?php 
+    header("Content-Type: text/html; charset=ISO-8859-1");
+    ob_start();
+    //Includo il file che esegue il login.
+    include('index.php');
+    //Metodo che torna a permette di stampare tutto quello che segue.
+    ob_end_clean();
+    if (isset($_SESSION['amministratore_gerente']) ) :
+    ?>
+
     <!--Main Navigation-->
     <header>
 
@@ -53,23 +63,6 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="amministratore.php">Amministratore</a>
-                        </li>
-                    </ul>
-
-                    <!-- Right -->
-                    <ul class="navbar-nav nav-flex-icons">
-                        <li class="nav-item">
-                            <a href="signup.php" class="nav-link border border-light rounded waves-effect">
-                                <i class="fas fa-user-plus"></i>Registrati
-                            </a>
-                        </li>&nbsp;
-                        <li class="nav-item">
-                            <a href="login.php" class="nav-link border border-light rounded waves-effect">
-                                <i class="fas fa-sign-in-alt"></i>Login
-                            </a>
-                        </li>
                     </ul>
 
                 </div>
@@ -83,16 +76,29 @@
     <!-- Contenuto visivo della pagina -->
     <article class="card-body mx-auto" style="max-width: 450px; margin-top:10%;">
         <h4 class="card-title mt-3 text-center">Benvenuto!</h4>
-        <p class="text-center">In questa pagina puoi caricare le disponibilità delle strutture e gestire i clienti che hanno riservato gli alloggi.</p>
+        <p class="text-center">In questa pagina puoi caricare le disponibilit&agrave; delle strutture e gestire i clienti che hanno riservato gli alloggi.</p>
         <form>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block"> Carica disponibilità </button>
+                <button type="submit" class="btn btn-primary btn-block"> Carica disponibilit&agrave; </button>
             </div> <!-- form-group// -->
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block"> Gestisci clienti </button>
             </div> <!-- form-group// -->
         </form>
     </article>
+
+    <?php else : ?>
+        <!-- Contenuto visivo della pagina -->
+	<article class="card-body mx-auto" style="max-width: 450px;">
+        <h4 class="card-title mt-3 text-center">Errore!</h4>
+        <p class="text-center">Non hai il permesso di accedere a questa pagina.</p>
+		<form action="index.php">
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary btn-block"><a href="index.php"></a> Torna alla home </button>
+            </div> <!-- form-group// -->
+		</form>
+	</article>
+    <?php endif; ?>
 
     <!-- SCRIPTS -->
     <!-- JQuery -->
