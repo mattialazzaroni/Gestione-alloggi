@@ -1,10 +1,19 @@
+<?php
+$pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+
+
+if ($pageWasRefreshed) {
+  //Fai qualcosa quando la pagina viene ricaricata.  
+}
+?>
+
 <!-- Homepage del progetto -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <meta name="00.10.00 26.11.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="00.11.00 03.12.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Riserva subito un alloggio!</title>
   <!-- Font Awesome -->
@@ -62,7 +71,7 @@
               <li class="nav-item">
                 <a class="nav-link waves-effect" href="amministratore-gerente.php">Amministratore gerente</a>
               </li>
-              <?php endif; ?>
+            <?php endif; ?>
             <?php
             if (isset($_SESSION['amministratore'])) :
               ?>
@@ -139,11 +148,11 @@
                   <div class="btn-group" role="group">
                     <div class="dropdown dropdown-lg">
                       <form action="" role="form" method="post" id="formCerca" onsubmit="">
-                        <input type="text" id="nome" name="nome" class="form-control" size="4.5em" <?php if (isset($_SESSION['nome'])) {
-                                                                                                      echo 'value="' . $_SESSION['nome'] . '"';
-                                                                                                    } else if (isset($_POST['nome'])) {
-                                                                                                      echo 'value="' . $_POST['nome'] . '"';
-                                                                                                    } ?> placeholder="Cerca un alloggio" />
+                        <input type="text" id="nome" name="nome" class="form-control" size="4.5em" placeholder="Cerca un alloggio" <?php /*if (isset($_SESSION['nome'])) {
+                                                                                                                                      echo 'value="' . $_SESSION['nome'] . '"';
+                                                                                                                                    } else if(!isset($_SESSION['nome'])) {
+                                                                                                                                      echo 'value=""';
+                                                                                                                                    }*/?> />
                         <button name="cerca" type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                       </form>
                       <button type="button" class="btn btn-default dropdown-toggle filtro" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
@@ -260,6 +269,10 @@
     $stmt = $db->prepare($get_max_id);
     $stmt->execute();
     $max_id = implode($stmt->fetch(PDO::FETCH_ASSOC));
+
+    //Sessione per sapere se viene trovato almeno un alloggio.
+    $_SESSION['no_data'] = true;
+
     //Ciclo che viene eseguito in base al numero di alloggi presenti e che stampa gli alloggi. 
     for ($i = 1; $i < $max_id + 1; $i++) {
       //Se viene cliccato il tasto di ricerca.
@@ -338,46 +351,59 @@
       $stmt = $db->prepare($accomodation_query);
       //Eseguo la query.
       $stmt->execute();
+      //Se viene trovato anche solo un alloggio, imposto a false la sessione che indica l'assenza di alloggi.
+      if($stmt->rowCount() > 0){
+        $_SESSION['no_data'] = false;
+      }
       $row = $stmt->fetch();
       //Salvo alcune variabili utili.
-      $nome = $row["nome"];
-      $indirizzo = $row["indirizzo"];
-      $link_immagine = $row["link_immagine"];
-      $regione = $row["regione"];
-      $citta = $row["citta"];
-      $nome_tipologia = $row["nome_tipologia"];
-      $_SESSION["mappa"] = $row["link_mappa"];
+      ${"nome" . $i}  = $row["nome"];
+      ${"indirizzo" . $i} = $row["indirizzo"];
+      ${"link_immagine" . $i} = $row["link_immagine"];
+      ${"regione" . $i} = $row["regione"];
+      ${"citta" . $i} = $row["citta"];
+      ${"nome_tipologia" . $i} = $row["nome_tipologia"];
+      ${"link_mappa" . $i} = $row["link_mappa"];
       //Stampo un alloggio.
-      echo '<div class="row wow fadeIn">
+      echo '<form id="dettagli' . $i . '" action="dettagli.php" method="post">
+              <div class="row wow fadeIn">
                 <div class="col-lg-5 col-xl-4 mb-4">
                   <div class="view overlay rounded z-depth-1">
-                    <img src="' . $link_immagine . '" class="img-fluid" alt="">
-                    <a href="#" target="_blank">
-                      <div class="mask rgba-white-slight"></div>
-                    </a>
+                    <img src="' . ${"link_immagine" . $i} . '" class="img-fluid" alt="">
                   </div>
                 </div>
                 
                 <div class="col-lg-7 col-xl-7 ml-xl-4 mb-4">
                   <h3 class="mb-3 font-weight-bold dark-grey-text">
-                    <strong>' . $nome . '</strong>
+                    <strong>' . ${"nome" . $i} . '</strong>
                   </h3>
                   <p>
-                    <strong>' . $indirizzo . '</strong>
+                    <strong>' . ${"indirizzo" . $i} . '</strong>
                   </p>
-                    <p class="grey-text">' . $citta . ', ' . $regione . '</p>
-                  <a href="#" target="_blank" class="btn btn-primary btn-md">Mostra dettagli
+                    <p class="grey-text">' . ${"citta" . $i} . ', ' . ${"regione" . $i} . '</p>
+                  <!--<a href="#" target="_blank" class="btn btn-primary btn-md">Mostra dettagli
                     <i class="fas fa-play ml-2"></i>
-                  </a>
+                  </a>-->
+                  <button name="mostraDettagli' . $i . '" type="submit" class="btn btn-primary" onclick="this.form.submit()">Mostra dettagli</button>
                 </div>
               </div>
-              <hr class="mb-5">';
+              <hr class="mb-5">
+            </form>';
+
+      if (isset($_POST['mostraDettagli' . $i])) {
+        $_SESSION["nomeDettagli"] = ${"nome" . $i};
+        $_SESSION["linkImmagineDettagli"] = ${"link_immagine" . $i};
+        $_SESSION["regioneDettagli"] = ${"regione" . $i};
+        $_SESSION["cittaDettagli"] = ${"citta" . $i};
+        $_SESSION["linkMappaDettagli"] = ${"link_mappa" . $i};
+        $_SESSION["indirizzoDettagli"] = ${"indirizzo" . $i};
+      }
     }
 
-
-    //if (isset($_SESSION['no_data'])) {
-    //  echo "<p color='red'>Non &egrave stato trovato nessun alloggio. Controlla i filtri.</p>";
-    //}
+    //Se non viene trovato nessun alloggio, stampo un messaggio d'errore.
+    if ($_SESSION['no_data'] == true) {
+      echo "<p class='text-center' style='color:red;'>Non &egrave stato trovato nessun alloggio. Controlla i filtri.</p>";
+    }
 
     ?>
 

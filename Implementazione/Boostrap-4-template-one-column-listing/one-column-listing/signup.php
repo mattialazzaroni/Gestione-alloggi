@@ -54,17 +54,17 @@ if (isset($_POST['reg_user'])) {
 	if (empty($number)) {
 		array_push($errors, "Il numero di telefono è richiesto");
 	} else {
-		if (!is_numeric($number)) {
+		if (!is_numeric(str_replace(" ", "", $number))) {
 			array_push($errors, "Il formato per il numero di telefono non è valido");
 		}
 		$full_number = '+' . $prefix . $number;
 	}
 	if (empty($password_1)) {
 		array_push($errors, "La password è richiesta");
-	}
-	if (strlen(trim($password_1)) < 6) {
-		array_push($errors, "La password è troppo corta");
 	} else {
+		if (strlen(trim($password_1)) < 6) {
+			array_push($errors, "La password è troppo corta");
+		}
 		$password_1 = trim($password_1);
 	}
 	if ($password_1 != $password_2) {
@@ -75,7 +75,7 @@ if (isset($_POST['reg_user'])) {
 	}
 
 	//Se non ci sono errori si procede alla preparazione della query.
-	if (count($errors) == 0) {
+	if (!empty($email)) {
 		//Query per controllare che un utente non esista già con quella email.
 		$user_check_query = "SELECT * FROM utente WHERE email=:email LIMIT 1";
 		//Query per controllare che un amministratore non esista già con quella email.
@@ -104,7 +104,7 @@ if (isset($_POST['reg_user'])) {
 			array_push($errors, "La seguente email è già in uso");
 		} 
 		//Altrimenti procedo.
-		else {
+		else if (count($errors) == 0){
 			$email = trim($email);
 			unset($stmt);
 
@@ -146,7 +146,7 @@ if (isset($_POST['reg_user'])) {
 					$mail->Host       = 'smtp.live.com';                    // Set the SMTP server to send through
 					$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
 					$mail->Username   = 'gestionealloggi@hotmail.com';                     // SMTP username
-					$mail->Password   = 'Password&3';                               // 
+					$mail->Password   = 'Password&3';                               //  SMTP password
 					$mail->SMTPSecure = 'tsl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
 					$mail->Port       = 587;                                    // TCP port to connect to
 
@@ -251,7 +251,7 @@ if (isset($_POST['reg_user'])) {
 				<div class="input-group-prepend">
 					<span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
 				</div>
-				<input name="email" class="form-control" placeholder="Email" type="email" value="<?php echo $email; ?>">
+				<input name="email" class="form-control" placeholder="Email" type="text" value="<?php echo $email; ?>">
 			</div> <!-- form-group// -->
 			<div class="form-group input-group">
 				<div class="input-group-prepend">

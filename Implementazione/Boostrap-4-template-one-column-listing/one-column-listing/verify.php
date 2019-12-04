@@ -43,7 +43,7 @@ include('server.php');
             $update->execute();
             echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">';
             echo '<br><div style="font-size:20px;"><b>Congratulazioni!</b><br> Il tuo account è stato attivato, ora puoi fare il login.</div><br>';
-            echo '<a href="login.php" class="btn btn-primary btn-block"> Torna alla login </a>';
+            echo '<a href="login.php" class="btn btn-primary btn-block"> Vai al login </a>';
             echo '</div>';
         //Nel caso che la query non produca nessun risultato, stampo un messaggio di errore all'utente.
         } else { 

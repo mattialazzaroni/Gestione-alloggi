@@ -17,9 +17,7 @@ create table amministratore_gerente(
     nome varchar(30) not null unique,
     cognome varchar(30) not null,
     password_admin_gerente varchar(255) not null,
-    n_telefono varchar(20) not null,
-    hash varchar(255) not null,
-    is_active int(1) default 0
+    n_telefono varchar(20) not null
 );
 
 create table amministratore(
@@ -65,11 +63,29 @@ create table alloggio(
     foreign key(nome_tipologia) references tipologia(nome)
 );
 
+create table camera(
+	id int primary key auto_increment,
+    numero_bambini int not null,
+    numero_adulti int not null,
+    id_alloggio int not null,
+    email_gerente varchar(50) not null,
+    foreign key(id_alloggio) references alloggio(id),
+    foreign key(email_gerente) references alloggio(email_gerente)
+);
+
+create table riservazione(
+	id int primary key auto_increment,
+    data_checkin date not null,
+    data_checkout date not null,
+    id_camera int not null,
+    foreign key(id_camera) references camera(id)
+);
+
 insert into tipologia values ("Albergo");
 insert into tipologia values ("Bed & Breakfast");
 insert into tipologia values ("Camping");
 
-insert into amministratore_gerente values ("mattia.lazza@gmail.com", "Mattia", "Lazzaroni", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "+41764650110", "807685d729e35ac6862a94c069eb68b2", 1);
+insert into amministratore_gerente values ("mattia.lazza@gmail.com", "Mattia", "Lazzaroni", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "+41764650110");
 
 insert into amministratore values ("mattia.lazzaroni@samtrevano.ch", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "Mattia", "Lazzaroni");
 
@@ -277,6 +293,31 @@ insert into alloggio values (20,
  (select nome from tipologia where nome = "Camping")
 );
 
+insert into camera values (1, 0, 2, 1, "mattia.lazza@gmail.com");
+insert into camera values (2, 1, 1, 1, "mattia.lazza@gmail.com");
+insert into camera values (3, 0, 1, 1, "mattia.lazza@gmail.com");
+insert into camera values (4, 1, 2, 1, "mattia.lazza@gmail.com");
+insert into camera values (5, 2, 2, 1, "mattia.lazza@gmail.com");
+insert into camera values (6, 3, 2, 1, "mattia.lazza@gmail.com");
+
+insert into camera values (7, 0, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (8, 1, 1, 2, "mattia.lazza@gmail.com");
+insert into camera values (9, 0, 1, 2, "mattia.lazza@gmail.com");
+insert into camera values (10, 1, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (11, 2, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (12, 3, 2, 2, "mattia.lazza@gmail.com");
+
+insert into camera values (13, 0, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (14, 1, 1, 3, "mattia.lazza@gmail.com");
+insert into camera values (15, 0, 1, 3, "mattia.lazza@gmail.com");
+insert into camera values (16, 1, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (17, 2, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (18, 3, 2, 3, "mattia.lazza@gmail.com");
+
+
+insert into riservazione values (1, '2019-11-25', '2020-01-25', 1);
+insert into riservazione values (2, '2019-11-15', '2019-11-20', 1);
+insert into riservazione values (3, '2019-01-25', '2019-01-30', 1);
 
 
 
