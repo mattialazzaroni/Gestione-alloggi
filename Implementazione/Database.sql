@@ -317,7 +317,9 @@ insert into camera values (18, 3, 2, 3, "mattia.lazza@gmail.com");
 
 insert into riservazione values (1, '2019-11-25', '2020-01-25', 1);
 insert into riservazione values (2, '2019-11-15', '2019-11-20', 1);
-insert into riservazione values (3, '2019-01-25', '2019-01-30', 1);
+insert into riservazione values (3, '2019-12-16', '2019-12-22', 1);
+insert into riservazione values (4, '2019-12-29', '2020-01-05', 1);
+
 
 
 

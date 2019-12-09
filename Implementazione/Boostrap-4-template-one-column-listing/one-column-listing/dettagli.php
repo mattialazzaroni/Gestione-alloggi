@@ -98,6 +98,8 @@ ob_end_clean();
         } else {
             if ($today > strtotime($checkin)) {
                 array_push($errors, "Non puoi riservare nel passato");
+            } else {
+                $_SESSION['checkin'] = date("Y-m-d", strtotime($_POST['checkin']));
             }
         }
 
@@ -107,32 +109,38 @@ ob_end_clean();
             if (!empty($checkin)) {
                 if (strtotime($checkout) < strtotime($checkin)) {
                     array_push($errors, "La data del check-in deve essere prima del check-out");
+                } else {
+                    $_SESSION['checkout'] = date("Y-m-d", strtotime($_POST['checkout']));
                 }
             }
         }
 
-        if (empty($adulti) &&  strlen($adulti) == 0) {
+        if (empty($adulti) && strlen($adulti) == 0) {
             array_push($errors, 'Il numero di adulti &egrave; richiesto (in caso di assenza, inserire "0")');
+        } else {
+            $_SESSION['adulti'] = $_POST['adulti'];
         }
 
         if (empty($bambini) && strlen($bambini) == 0) {
             array_push($errors, 'Il numero di bambini &egrave; richiesto (in caso di assenza, inserire "0")');
+        } else {
+            $_SESSION['bambini'] = $_POST['bambini'];
         }
     }
 
     $typeDate = "(this.type='date')";
     //All'apertura della pagina tramite invio di form o all'invio del form della seguente pagina.
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' || isset($_POST['cercaDisponibilita'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //Stampo l'alloggio.
-        echo ' <div class="row wow fadeIn text-center" style="margin-top:12.5vh;">
+        echo '<div class="row wow fadeIn text-center" style="margin-top:12.5vh;">
         
         <div class="col-lg-12 col-xl-12 ml-xl-4 mb-4">
-          <h3 class="mb-3 font-weight-bold dark-grey-text">
+        <h3 class="mb-3 font-weight-bold dark-grey-text">
             <strong>' . $_SESSION['nomeDettagli'] . '</strong>
-          </h3>
-          <p>
+        </h3>
+        <p>
             <strong>' . $_SESSION['indirizzoDettagli'] . '</strong>
-          </p>
+        </p>
             <p class="grey-text">' . $_SESSION['cittaDettagli'] . ', ' . $_SESSION['regioneDettagli'] . '</p>
         </div>
 
@@ -151,33 +159,101 @@ ob_end_clean();
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-calendar-alt"></i> </span>
                         </div>
-                        <input name="checkin" class="form-control" placeholder="Check-in" type="text" onfocus="' . $typeDate . '" value="' . $checkin . '">
-                        <input name="checkout" class="form-control" placeholder="Check-out" type="text" onfocus="' . $typeDate . '" value="' . $checkout . '">
+                        <input name="checkin" class="form-control" placeholder="Check-in" type="text" onfocus="' . $typeDate . '" value="' . $checkin . '" title="Data del Check-in">
+                        <input name="checkout" class="form-control" placeholder="Check-out" type="text" onfocus="' . $typeDate . '" value="' . $checkout . '" title="Data del Check-out">
                     </div> <!-- form-group// -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-child"></i> </span>
                         </div>
-                        <input name="adulti" class="form-control" placeholder="Inserisci il numero di adulti" type="number" min="0" value="' . $adulti . '">
+                        <input name="adulti" class="form-control" placeholder="Inserisci il numero di adulti" type="number" min="0" value="' . $adulti . '" title="Numero di adulti">
                     </div> <!-- form-group// -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-baby"></i> </span>
                         </div>
-                        <input name="bambini" class="form-control" placeholder="Inserisci il numero di bambini" type="number" min="0" value="' . $bambini . '">
+                        <input name="bambini" class="form-control" placeholder="Inserisci il numero di bambini" type="number" min="0" value="' . $bambini . '" title="Numbero di bambini">
                     </div> <!-- form-group// -->
-                    <button type="submit" name="cercaDisponibilita" class="btn btn-primary btn-block"> Cerca disponibilit&agrave; </button><br>';
-                    //In caso di errori, vado a stamparli quando il bottone viene premuto.
-                    if(count($errors) > 0){
-                        echo '<div class="error">';
-                        foreach ($errors as $error) :
-                            echo '<p style="color:red">' . $error . '</p>';
-                        endforeach;
-                        echo '</div>';
-                    }
-                echo '</form>
+                    <button type="submit" name="cercaDisponibilita" class="btn btn-primary btn-block"> Cerca disponibilit&agrave; </button>';
+        //In caso di errori, vado a stamparli quando il bottone viene premuto.
+        if (count($errors) > 0) {
+            echo '<div class="error">';
+            foreach ($errors as $error) :
+                echo '<p style="color:red">' . $error . '</p>';
+            endforeach;
+            echo '</div>';
+        }
+        echo '</form>
             </article>
         </div>';
+    }
+
+    if(isset($_POST['cercaDisponibilita'])){
+        if (count($errors) == 0) {
+            ob_start();
+            //Includo il file che esegue la connessione al database.
+            include('server.php');
+            ob_end_clean();
+
+            $reservation_query = "SELECT camera.id,
+            camera.numero_bambini,
+            camera.numero_adulti,
+            camera.email_gerente
+            FROM amministratore_gerente
+            JOIN alloggio ON amministratore_gerente.email = alloggio.email_gerente 
+            JOIN camera ON alloggio.id = camera.id_alloggio
+            JOIN riservazione ON camera.id = riservazione.id_camera
+            WHERE camera.numero_adulti = '" . $_SESSION['adulti'] . "'
+            AND camera.numero_bambini = '" . $_SESSION['bambini'] . "'
+            AND riservazione.data_checkin <= '" . $_SESSION['checkout'] . "'
+            AND riservazione.data_checkout >= '" . $_SESSION['checkin'] . "'";
+
+            $stmt = $db->prepare($reservation_query);
+            //Eseguo la query.
+            $stmt->execute();
+            //Se eseguendo la query viene trovata una riga, preparo una nuova query.
+            if ($stmt->rowCount() == 1) {
+                $row = $stmt->fetch(PDO::FETCH_NUM);
+                echo "Per quella data &egrave; stata trovata la camera " . $row[0] . ", per " . $row[1] . " bambini, " . $row[2] . " adulti e gestita dal gerente &quot;" . $row[3] . "&quot;.";
+            } else if ($stmt->rowCount() > 1) {
+                echo "Per quella data sono disponibili le seguenti camere:<br><br>
+                <table class='table table-<striped'>
+                    <tr>
+                        <th>Numero</th> 
+                        <th>Adulti</th>
+                        <th>Bambini</th>
+                        <th>Gerente</th>
+                        <th>Riserva</th>
+                    </tr>
+                    <tr>";
+                    while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+                        //${"id" . $i}  = $row[0];
+                        //${"email_gerente" . $i} = $row[1];
+                        echo "<tr>
+                            <td>"
+                                . $row[0] . 
+                            "</td>
+                            <td>"
+                                . $row[1] .
+                            "</td>
+                            <td>"
+                                . $row[2] .
+                            "</td>
+                            <td>"
+                                . $row[3] .
+                            "</td>
+                            <td>
+                                <input type='checkbox' name='camera".$row[0]."'>
+                            </td>
+                        </tr>";
+                    }
+                echo "</table>";
+            } else {
+                echo "Nessuna camera disponibile in questa data. Prova con un'altra data! <br><br>";
+            }
+            unset($stmt);
+            unset($row);
+        }
     }
 
     ?>
