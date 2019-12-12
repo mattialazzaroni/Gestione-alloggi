@@ -1,10 +1,5 @@
 <?php
-$pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
 
-
-if ($pageWasRefreshed) {
-  //Fai qualcosa quando la pagina viene ricaricata.  
-}
 ?>
 
 <!-- Homepage del progetto -->
@@ -13,7 +8,7 @@ if ($pageWasRefreshed) {
 
 <head>
   <meta charset="utf-8">
-  <meta name="00.11.00 03.12.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="00.12.00 10.12.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Riserva subito un alloggio!</title>
   <!-- Font Awesome -->
@@ -131,7 +126,7 @@ if ($pageWasRefreshed) {
           //Se l'utente esegue il login cambio il messaggio di benvenuto.
           if (isset($_SESSION['loggedin'])) :
             ?>
-            <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato correttamente l'accesso come <?php echo $_SESSION['type']; ?>. Cerca un alloggio</h2>
+            <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato l'accesso come <b><?php echo $_SESSION['type']; ?>.</b></h2>
           <?php else : ?>
             <h2 class="h1 text-center mb-5">Cerca un alloggio </h2>
           <?php endif; ?>

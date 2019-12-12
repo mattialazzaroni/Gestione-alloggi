@@ -71,11 +71,11 @@ if (isset($_POST['login_user'])) {
 		} else if ($stmt2->rowCount() == 1) {
 			$row = $stmt2->fetch(PDO::FETCH_ASSOC);
 			$hashed_password = $row["password_admin"];
-			$email = $row["email"];
 			//Se la password inserita dall'utente coincide con la password hashata presente nel db e legata a quell'email.
 			if (password_verify($password, $hashed_password)) {
 				//Imposto delle variabili session e sposto l'utente alla homepage.
 				$_SESSION["name"] = $row["nome"];
+				$_SESSION["email"] = $row["email"];
 				$_SESSION["amministratore"] = true;
 				$_SESSION["loggedin"] = true;
 				$_SESSION["type"] = "amministratore";
@@ -93,6 +93,7 @@ if (isset($_POST['login_user'])) {
 			if (password_verify($password, $hashed_password)) {
 				//Imposto delle variabili session e sposto l'utente alla homepage.
 				$_SESSION["name"] = $row["nome"];
+				$_SESSION["email"] = $email;
 				$_SESSION["amministratore_gerente"] = true;
 				$_SESSION["loggedin"] = true;
 				$_SESSION["type"] = "amministratore gerente";

@@ -152,7 +152,7 @@ ob_end_clean();
         <div class="col-lg-6 col-xl-6 mb-4">
             <iframe src="' . $_SESSION['linkMappaDettagli'] . '" width="100%" height="300" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
 
-            <!-- Contenuto visivo della pagina con form di login -->
+            <!-- Contenuto visivo della pagina con form di riservazione -->
             <article class="card-body" style="max-width:450px">
                 <form method="post" action="dettagli.php" id="formRiservazione">
                     <div class="form-group input-group">

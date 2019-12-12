@@ -1,5 +1,9 @@
 <?php
-
+if (isset($_POST['disponibilita'])) {
+    header('Location: carica-disponibilita.php');
+} else if (isset($_POST['clienti'])) {
+    header('Location: gestisci-clienti.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,82 +26,82 @@
 
 <body>
 
-    <?php 
+    <?php
     header("Content-Type: text/html; charset=ISO-8859-1");
     ob_start();
     //Includo il file che esegue il login.
     include('index.php');
     //Metodo che torna a permette di stampare tutto quello che segue.
     ob_end_clean();
-    if (isset($_SESSION['amministratore_gerente']) ) :
-    ?>
+    if (isset($_SESSION['amministratore_gerente'])) :
+        ?>
 
-    <!--Main Navigation-->
-    <header>
+        <!--Main Navigation-->
+        <header>
 
-        <!-- Navbar -->
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-            <div class="container">
+            <!-- Navbar -->
+            <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+                <div class="container">
 
-                <!-- Brand -->
-                <!-- <a class="navbar-brand waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
+                    <!-- Brand -->
+                    <!-- <a class="navbar-brand waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
       <strong class="blue-text">Progetto gestione alloggi</strong>
     </a> -->
 
-                <!-- Collapse -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                    <!-- Collapse -->
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <!-- Links -->
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Links -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    <!-- Left -->
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="index.php">Tutte le strutture
-                            </a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link waves-effect" href="#">Amministratore gerente
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                    </ul>
+                        <!-- Left -->
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link waves-effect" href="index.php">Tutte le strutture
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link waves-effect" href="#">Amministratore gerente
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
 
                 </div>
+            </nav>
+            <!-- Navbar -->
 
-            </div>
-        </nav>
-        <!-- Navbar -->
+        </header>
 
-    </header>
-
-    <!-- Contenuto visivo della pagina -->
-    <article class="card-body mx-auto" style="max-width: 450px; margin-top:10%;">
-        <h4 class="card-title mt-3 text-center">Benvenuto!</h4>
-        <p class="text-center">In questa pagina puoi caricare le disponibilit&agrave; delle strutture e gestire i clienti che hanno riservato gli alloggi.</p>
-        <form>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block"> Carica disponibilit&agrave; </button>
-            </div> <!-- form-group// -->
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block"> Gestisci clienti </button>
-            </div> <!-- form-group// -->
-        </form>
-    </article>
+        <!-- Contenuto visivo della pagina -->
+        <article class="card-body mx-auto" style="max-width: 450px; margin-top:10%;">
+            <h4 class="card-title mt-3 text-center">Benvenuto!</h4>
+            <p class="text-center">In questa pagina puoi caricare le disponibilit&agrave; delle strutture e gestire i clienti che hanno riservato gli alloggi.</p>
+            <form method="post" action="amministratore-gerente.php">
+                <div class="form-group">
+                    <button id="disponibilita" name="disponibilita" type="submit" class="btn btn-primary btn-block"> Carica disponibilit&agrave; </button>
+                </div> <!-- form-group// -->
+                <div class="form-group">
+                    <button id="clienti" name="clienti" type="submit" class="btn btn-primary btn-block"> Gestisci clienti </button>
+                </div> <!-- form-group// -->
+            </form>
+        </article>
 
     <?php else : ?>
         <!-- Contenuto visivo della pagina -->
-	<article class="card-body mx-auto" style="max-width: 450px;">
-        <h4 class="card-title mt-3 text-center">Errore!</h4>
-        <p class="text-center">Non hai il permesso di accedere a questa pagina.</p>
-		<form action="index.php">
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary btn-block"><a href="index.php"></a> Torna alla home </button>
-            </div> <!-- form-group// -->
-		</form>
-	</article>
+        <article class="card-body mx-auto" style="max-width: 450px;">
+            <h4 class="card-title mt-3 text-center">Errore!</h4>
+            <p class="text-center">Non hai il permesso di accedere a questa pagina.</p>
+            <form action="index.php">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"><a href="index.php"></a> Torna alla home </button>
+                </div> <!-- form-group// -->
+            </form>
+        </article>
     <?php endif; ?>
 
     <!-- SCRIPTS -->
