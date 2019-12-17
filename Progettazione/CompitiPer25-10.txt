@@ -1,5 +1,0 @@
-terminare conferma tramite email registrazione
-mettere il sito sul server
-mettere i dati su sito (con script che ripulisce)
-priorità al meccanismo di ricerca allogi con riservazione
-

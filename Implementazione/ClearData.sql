@@ -11,6 +11,8 @@ insert into tipologia values ("Albergo");
 insert into tipologia values ("Bed & Breakfast");
 insert into tipologia values ("Camping");
 
+insert into utente values ("lazza.yt@gmail.com", "Mattia", "Lazzaroni", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "+41764650110", "d09bf111dee33a7a4c960ccbf68ba0f2", 1);
+
 insert into amministratore_gerente values ("mattia.lazza@gmail.com", "Mattia", "Lazzaroni", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "+41764650110");
 
 insert into amministratore values ("mattia.lazzaroni@samtrevano.ch", "$2y$10$UwB.V5xhQAxhXRKZycFydeTtbs9j9AlSSvyWO0ZPla5vwTgTtyOqC", "Mattia", "Lazzaroni");
@@ -216,31 +218,70 @@ insert into alloggio values (20,
  (select nome from tipologia where nome = "Camping")
 );
 
+
 insert into camera values (1, 0, 2, 1, "mattia.lazza@gmail.com");
-insert into camera values (2, 1, 1, 1, "mattia.lazza@gmail.com");
-insert into camera values (3, 0, 1, 1, "mattia.lazza@gmail.com");
-insert into camera values (4, 1, 2, 1, "mattia.lazza@gmail.com");
-insert into camera values (5, 2, 2, 1, "mattia.lazza@gmail.com");
-insert into camera values (6, 3, 2, 1, "mattia.lazza@gmail.com");
+insert into camera values (2, 0, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (3, 0, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (4, 0, 2, 4, "mattia.lazza@gmail.com");
+insert into camera values (5, 0, 2, 5, "mattia.lazza@gmail.com");
+insert into camera values (6, 0, 2, 6, "mattia.lazza@gmail.com");
+insert into camera values (7, 0, 2, 7, "mattia.lazza@gmail.com");
+insert into camera values (8, 0, 2, 8, "mattia.lazza@gmail.com");
+insert into camera values (9, 0, 2, 9, "mattia.lazza@gmail.com");
+insert into camera values (10, 0, 2, 10, "mattia.lazza@gmail.com");
+insert into camera values (11, 0, 2, 11, "mattia.lazza@gmail.com");
+insert into camera values (12, 0, 2, 12, "mattia.lazza@gmail.com");
+insert into camera values (13, 0, 2, 13, "mattia.lazza@gmail.com");
+insert into camera values (14, 0, 2, 14, "mattia.lazza@gmail.com");
+insert into camera values (15, 0, 2, 15, "mattia.lazza@gmail.com");
+insert into camera values (16, 0, 2, 16, "mattia.lazza@gmail.com");
+insert into camera values (17, 0, 2, 17, "mattia.lazza@gmail.com");
+insert into camera values (18, 0, 2, 18, "mattia.lazza@gmail.com");
+insert into camera values (19, 0, 2, 19, "mattia.lazza@gmail.com");
+insert into camera values (20, 0, 2, 20, "mattia.lazza@gmail.com");
 
-insert into camera values (7, 0, 2, 2, "mattia.lazza@gmail.com");
-insert into camera values (8, 1, 1, 2, "mattia.lazza@gmail.com");
-insert into camera values (9, 0, 1, 2, "mattia.lazza@gmail.com");
-insert into camera values (10, 1, 2, 2, "mattia.lazza@gmail.com");
-insert into camera values (11, 2, 2, 2, "mattia.lazza@gmail.com");
-insert into camera values (12, 3, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (21, 1, 1, 1, "mattia.lazza@gmail.com");
+insert into camera values (22, 0, 1, 1, "mattia.lazza@gmail.com");
+insert into camera values (23, 1, 2, 1, "mattia.lazza@gmail.com");
+insert into camera values (24, 2, 2, 1, "mattia.lazza@gmail.com");
+insert into camera values (25, 3, 2, 1, "mattia.lazza@gmail.com");
 
-insert into camera values (13, 0, 2, 3, "mattia.lazza@gmail.com");
-insert into camera values (14, 1, 1, 3, "mattia.lazza@gmail.com");
-insert into camera values (15, 0, 1, 3, "mattia.lazza@gmail.com");
-insert into camera values (16, 1, 2, 3, "mattia.lazza@gmail.com");
-insert into camera values (17, 2, 2, 3, "mattia.lazza@gmail.com");
-insert into camera values (18, 3, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (26, 1, 1, 2, "mattia.lazza@gmail.com");
+insert into camera values (27, 0, 1, 2, "mattia.lazza@gmail.com");
+insert into camera values (28, 1, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (29, 2, 2, 2, "mattia.lazza@gmail.com");
+insert into camera values (30, 3, 2, 2, "mattia.lazza@gmail.com");
 
+insert into camera values (31, 1, 1, 3, "mattia.lazza@gmail.com");
+insert into camera values (32, 0, 1, 3, "mattia.lazza@gmail.com");
+insert into camera values (33, 1, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (34, 2, 2, 3, "mattia.lazza@gmail.com");
+insert into camera values (35, 3, 2, 3, "mattia.lazza@gmail.com");
 
-insert into riservazione values (1, '2019-11-25', '2020-01-25', 1);
-insert into riservazione values (2, '2019-11-15', '2019-11-20', 1);
-insert into riservazione values (3, '2019-01-25', '2019-01-30', 1);
+insert into riservazione values (1, '2019-10-05', '2019-10-10', 1, 'lazza.yt@gmail.com');
+insert into riservazione values (2, '2019-10-05', '2019-10-10', 2, 'lazza.yt@gmail.com');
+insert into riservazione values (3, '2019-10-05', '2019-10-10', 3, 'lazza.yt@gmail.com');
+insert into riservazione values (4, '2019-10-05', '2019-10-10', 4, 'lazza.yt@gmail.com');
+insert into riservazione values (5, '2019-10-05', '2019-10-10', 5, 'lazza.yt@gmail.com');
+insert into riservazione values (6, '2019-10-05', '2019-10-10', 6, 'lazza.yt@gmail.com');
+insert into riservazione values (7, '2019-10-05', '2019-10-10', 7, 'lazza.yt@gmail.com');
+insert into riservazione values (8, '2019-10-05', '2019-10-10', 8, 'lazza.yt@gmail.com');
+insert into riservazione values (9, '2019-10-05', '2019-10-10', 9, 'lazza.yt@gmail.com');
+insert into riservazione values (10, '2019-10-05', '2019-10-10', 10, 'lazza.yt@gmail.com');
+insert into riservazione values (11, '2019-10-05', '2019-10-10', 11, 'lazza.yt@gmail.com');
+insert into riservazione values (12, '2019-10-05', '2019-10-10', 12, 'lazza.yt@gmail.com');
+insert into riservazione values (13, '2019-10-05', '2019-10-10', 13, 'lazza.yt@gmail.com');
+insert into riservazione values (14, '2019-10-05', '2019-10-10', 14, 'lazza.yt@gmail.com');
+insert into riservazione values (15, '2019-10-05', '2019-10-10', 15, 'lazza.yt@gmail.com');
+insert into riservazione values (16, '2019-10-05', '2019-10-10', 16, 'lazza.yt@gmail.com');
+insert into riservazione values (17, '2019-10-05', '2019-10-10', 17, 'lazza.yt@gmail.com');
+insert into riservazione values (18, '2019-10-05', '2019-10-10', 18, 'lazza.yt@gmail.com');
+insert into riservazione values (19, '2019-10-05', '2019-10-10', 19, 'lazza.yt@gmail.com');
+insert into riservazione values (20, '2019-10-05', '2019-10-10', 20, 'lazza.yt@gmail.com');
+insert into riservazione values (21, '2019-11-25', '2020-01-25', 1, 'lazza.yt@gmail.com');
+insert into riservazione values (22, '2019-11-15', '2019-11-20', 1, 'lazza.yt@gmail.com');
+insert into riservazione values (23, '2019-12-16', '2019-12-22', 1, 'lazza.yt@gmail.com');
+insert into riservazione values (24, '2019-12-29', '2020-01-05', 1, 'lazza.yt@gmail.com');
 
 
 
