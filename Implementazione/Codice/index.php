@@ -1,5 +1,10 @@
 <?php
-
+//Metodo che impedisce a tutto quello che segue di essere stampato a schermo.
+ob_start();
+//Includo il file che esegue il login.
+include('login.php');
+//Metodo che torna a permette di stampare tutto quello che segue.
+ob_end_clean();
 ?>
 
 <!-- Homepage del progetto -->
@@ -9,7 +14,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="00.13.00 17.12.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="00.14.00 20.12.2019" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Riserva subito un alloggio!</title>
   <!-- Font Awesome -->
@@ -54,22 +59,16 @@
               </a>
             </li>
             <?php
-            //Metodo che impedisce a tutto quello che segue di essere stampato a schermo.
-            ob_start();
-            //Includo il file che esegue il login.
-            include('login.php');
-            //Metodo che torna a permette di stampare tutto quello che segue.
-            ob_end_clean();
             //Se si è loggati come amministratore gerente o amministratore mostro il rispettivo bottone per il menu dedicato.
             if (isset($_SESSION['amministratore_gerente'])) :
-              ?>
+            ?>
               <li class="nav-item">
                 <a class="nav-link waves-effect" href="amministratore-gerente.php">Amministratore gerente</a>
               </li>
             <?php endif; ?>
             <?php
             if (isset($_SESSION['amministratore'])) :
-              ?>
+            ?>
               <li class="nav-item">
                 <a class="nav-link waves-effect" href="amministratore.php">Amministratore</a>
               </li>
@@ -77,31 +76,30 @@
           </ul>
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-            <?php
-            //Se non è stato effettuato il login do all'utente la possibilità di farlo o di creare un account.
-            if (!isset($_SESSION['loggedin'])) :
-              ?>
-              <li class="nav-item">
-                <a href="signup.php" class="nav-link border border-light rounded waves-effect">
-                  <i class="fas fa-user-plus"></i>Registrati
-                </a>
-              </li>&nbsp;
-              <li class="nav-item">
-                <a href="login.php" class="nav-link border border-light rounded waves-effect">
-                  <i class="fas fa-sign-in-alt"></i>Login
-                </a>
-              </li>&nbsp;
-            <?php endif; ?>
-            <?php
-            //Stampo il bottone per il logout se l'utente ha effettuato il login.
-            if (isset($_SESSION['loggedin'])) :
-              ?>
-              <li class="nav-item">
-                <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-                  <i class="fas fa-sign-out-alt"></i>Logout
-                </a>
-              </li>
-            <?php endif; ?>
+          <?php
+          //Se non è stato effettuato il login, dò all'utente la possibilità di farlo o di creare un account.
+          if (!isset($_SESSION['loggedin'])) :
+          ?>
+            <li class="nav-item">
+              <a href="signup.php" class="nav-link border border-light rounded waves-effect">
+                <i class="fas fa-user-plus"></i>Registrati
+              </a>
+            </li>&nbsp;
+            <li class="nav-item">
+              <a href="login.php" class="nav-link border border-light rounded waves-effect">
+                <i class="fas fa-sign-in-alt"></i>Login
+              </a>
+            </li>&nbsp;
+          <?php endif;
+          //Stampo il bottone per il logout se l'utente ha effettuato il login.
+          if (isset($_SESSION['loggedin'])) :
+          ?>
+            <li class="nav-item">
+              <a href="logout.php" class="nav-link border border-light rounded waves-effect">
+                <i class="fas fa-sign-out-alt"></i>Logout
+              </a>
+            </li>
+          <?php endif; ?>
           </ul>
 
         </div>
@@ -126,7 +124,7 @@
           <?php
           //Se l'utente esegue il login cambio il messaggio di benvenuto.
           if (isset($_SESSION['loggedin'])) :
-            ?>
+          ?>
             <h2 class="h1 text-center mb-5">Ciao <?php echo $_SESSION['name']; ?>, hai effettuato l'accesso come <b><?php echo $_SESSION['type']; ?>.</b></h2>
           <?php else : ?>
             <h2 class="h1 text-center mb-5">Cerca un alloggio </h2>
@@ -305,20 +303,20 @@
           }
           //Controllo se è stato inserito anche il nome di un alloggio.
           if (isset($whereNome)) {
-            $accomodation_query = "SELECT id FROM alloggio WHERE id = $i $where $whereNome LIMIT 1";
+            $accommodation_query = "SELECT id FROM alloggio WHERE id = $i $where $whereNome LIMIT 1";
           }
           //Altrimenti eseguo la query solo coi filtri senza nome.
           else {
-            $accomodation_query = "SELECT id FROM alloggio WHERE id = $i $where LIMIT 1";
+            $accommodation_query = "SELECT id FROM alloggio WHERE id = $i $where LIMIT 1";
           }
 
-          $stmt = $db->prepare($accomodation_query);
+          $stmt = $db->prepare($accommodation_query);
           //Eseguo la query.
           $stmt->execute();
           //Se eseguendo la query viene trovata una riga, preparo una nuova query.
           if ($stmt->rowCount() > 0) {
             $id = implode($stmt->fetch(PDO::FETCH_ASSOC));
-            $accomodation_query = "SELECT * FROM alloggio WHERE id = $id LIMIT 1";
+            $accommodation_query = "SELECT * FROM alloggio WHERE id = $id LIMIT 1";
           }
           //Altrimenti interrompo la corrente iterazione e passo alla prossima.
           else {
@@ -329,20 +327,20 @@
         else {
           //Se viene inserito un nome di un alloggio.
           if (isset($whereNome)) {
-            $accomodation_query = "SELECT * FROM alloggio WHERE id = $i $whereNome LIMIT 1";
-            echo $accomodation_query;
+            $accommodation_query = "SELECT * FROM alloggio WHERE id = $i $whereNome LIMIT 1";
+            echo $accommodation_query;
           }
           //Se non viene inserito un nome.
           else {
-            $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+            $accommodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
           }
         }
       }
       //Se non viene cliccato il bottone per cercare, stampo tutti gli alloggi.
       else {
-        $accomodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
+        $accommodation_query = "SELECT * FROM alloggio WHERE id = $i LIMIT 1";
       }
-      $stmt = $db->prepare($accomodation_query);
+      $stmt = $db->prepare($accommodation_query);
       //Eseguo la query.
       $stmt->execute();
       //Se viene trovato anche solo un alloggio, imposto a false la sessione che indica l'assenza di alloggi.
@@ -385,8 +383,8 @@
               <hr class="mb-5">
             </form>';
 
-        //Salvo delle sessioni utili che indicano l'alloggio cliccato.
-        //Queste variabili mi serviranno in "dettagli.php" per stampare le info dell'alloggio cliccato.
+      //Salvo delle sessioni utili che indicano l'alloggio cliccato.
+      //Queste variabili mi serviranno in "dettagli.php" per stampare le info dell'alloggio cliccato.
       if (isset($_POST['mostraDettagli' . $i])) {
         $_SESSION["nomeDettagli"] = ${"nome" . $i};
         $_SESSION["linkImmagineDettagli"] = ${"link_immagine" . $i};

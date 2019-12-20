@@ -7,7 +7,7 @@
 ## Lavori svolti
 | Orario        | Lavori svolti   |
 | ------------- | --------------- |
-| 13:15 - 14:45 | Durante le prime due ore della giornata di oggi ho realizzato lo use case del sito. Questo è il risultato: ![Use Case Diagram](../Analisi/UseCaseDiagram.png)  |
+| 13:15 - 14:45 | Durante le prime due ore della giornata di oggi ho realizzato lo use case del sito. Questo è il risultato: ![Use Case Diagram](../Analisi/UseCase.png)  |
 | 15:00 - 16:30 | Dopo la pausa mi sono concentrato sulla documentazione, in particolare ho sistemato la struttura generale e ho aggiunto la descrizione del Gantt e degli Use Case. In generale nella giornata di oggi ho finito l'analisi sulla documentazione. |
 
 ## Problemi riscontrati e soluzioni adottate

@@ -1,8 +1,8 @@
-# Gestione alloggi | Diario di lavoro - 24.10.2019
+# Gestione alloggi | Diario di lavoro - 25.10.2019
 
 ##### Mattia Lazzaroni
 
-### Canobbio, 24.10.2019
+### Canobbio, 25.10.2019
 
 ## Lavori svolti
 

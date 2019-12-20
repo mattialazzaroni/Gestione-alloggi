@@ -3,11 +3,10 @@ header("Content-Type: text/html; charset=ISO-8859-1");
 ob_start();
 //Includo il file amministratore-gerente.php.
 include('amministratore-gerente.php');
-//Includo il file server.php.
+//Includo il file server.php e login.php.
 include('server.php');
 include('login.php');
 
-include('fpdf182/fpdf.php');
 //Metodo che torna a permette di stampare tutto quello che segue.
 ob_end_clean();
 
@@ -16,10 +15,11 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//Includo il file autoload di composer per PHPMailer.
+//Includo il file autoload di composer per PHPMailer e mPDF.
 require './phpmailer/vendor/autoload.php';
 require './mpdf/vendor/autoload.php';
 
+unset($_SESSION['message']);
 //Dichiare le variabili in cui assegnerò gli input dell'utente.
 $checkin = "";
 $checkout = "";
@@ -109,13 +109,13 @@ $email = "";
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                     </div>
-                    <input name="checkin" class="form-control" type="date" placeholder="Data check-in riservazione" value="<?php echo $checkin; ?>" min="<?php echo date('Y-m-d'); ?>" max="9999-12-31" title="Data del Check-in">
+                    <input name="checkin" class="form-control" type="date" placeholder="Data check-in riservazione" value="<?php echo $checkin; ?>" max="9999-12-31" title="Data del Check-in">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                     </div>
-                    <input name="checkout" class="form-control" type="date" placeholder="Data check-out riservazione" value="<?php echo $checkout; ?>" min="<?php echo date('Y-m-d'); ?>" max="9999-12-31" title="Data del Check-out">
+                    <input name="checkout" class="form-control" type="date" placeholder="Data check-out riservazione" value="<?php echo $checkout; ?>" max="9999-12-31" title="Data del Check-out">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
@@ -161,9 +161,6 @@ $email = "";
                 }
 
                 if (!empty($checkin) && !empty($checkout)) {
-                    if ($today > $checkin) {
-                        array_push($errors, "Non ci sono riservazioni nel passato");
-                    }
                     if ($checkout < $checkin) {
                         array_push($errors, "La data del check-in deve essere prima del check-out");
                     }

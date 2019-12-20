@@ -7,7 +7,7 @@
 ## Lavori svolti
 | Orario        | Lavori svolti   |
 | ------------- | --------------- |
-| 13:15 - 16:30 | All'inizio della giornata di lavoro di oggi ho lavorato sulla documentazione. Ho modificato il capitolo dell'analisi dei requisiti, aggiungendone di nuovi e sistemando quelli già esistenti. Fatto ciò ho aggiunto all'inizio del capitolo una descrizione per ogni tabella dei requisiti. Finito di lavorare sulla documentazione mi sono dedicato alla realizzazione del desgin che del database riguardante gli utenti che ho terminato. Dopo averlo terminato ho cominciato il design del database per la gestione della fatturazione, che non so se è necessario e che in caso non serva andrò ad eliminare durante la prossima lezione. |
+| 13:15 - 16:30 | All'inizio della giornata di lavoro di oggi ho lavorato sulla documentazione. Ho modificato il capitolo dell'analisi dei requisiti, aggiungendone di nuovi e sistemando quelli già esistenti. Fatto ciò ho aggiunto all'inizio del capitolo una descrizione per ogni tabella dei requisiti. Finito di lavorare sulla documentazione mi sono dedicato alla realizzazione del design del database. Dopo averlo terminato ho cominciato il design del database per la gestione della fatturazione, che non so se è necessario e che in caso non serva andrò ad eliminare durante la prossima lezione. |
 
 ## Problemi riscontrati e soluzioni adottate
 Nessun problema riscontrato.

@@ -47,30 +47,30 @@ if (isset($_POST['login_user'])) {
 		$stmt3->execute();
 
 		//Se la query ritorna un risultato.
-		if ($stmt1->rowCount() == 1) {
-			$row = $stmt1->fetch(PDO::FETCH_ASSOC);
-			$email = $row["email"];
-			$hashed_password = $row["password_utente"];
-			$active = $row["is_active"];
-			if ($active == 1) {
-				//Se la password inserita dall'utente coincide con la password hashata presente nel db e legata a quell'email.
-				if (password_verify($password, $hashed_password)) {
-					//Imposto delle variabili session e sposto l'utente alla homepage.
-					$_SESSION["name"] = $_SESSION["nome_utente"] = $row["nome"];
-					$_SESSION["email"] = $row["email"];
-					$_SESSION["utente"] = true;
-					$_SESSION["loggedin"] = true;
-					$_SESSION["type"] = "utente";
-					header('location: index.php');
+			if ($stmt1->rowCount() == 1) {
+				$row = $stmt1->fetch(PDO::FETCH_ASSOC);
+				$email = $row["email"];
+				$hashed_password = $row["password_utente"];
+				$active = $row["is_active"];
+				if ($active == 1) {
+					//Se la password inserita dall'utente coincide con la password hashata presente nel db è legata a quell'email.
+					if (password_verify($password, $hashed_password)) {
+						//Imposto delle variabili session e sposto l'utente alla homepage.
+						$_SESSION["name"] = $_SESSION["nome_utente"] = $row["nome"];
+						$_SESSION["email"] = $row["email"];
+						$_SESSION["utente"] = true;
+						$_SESSION["loggedin"] = true;
+						$_SESSION["type"] = "utente";
+						header('location: index.php');
+					}
+					//Altrimenti indico all'utente che la password inserita è errata.
+					else {
+						array_push($errors, "La password che hai inserito non è corretta");
+					}
+				} else {
+					array_push($errors, "Non hai verificato l'account, controlla la tua email!");
 				}
-				//Altrimenti indico all'utente che la password inserita è errata.
-				else {
-					array_push($errors, "La password che hai inserito non è corretta");
-				}
-			} else {
-				array_push($errors, "Non hai verificato l'account, controlla la tua email!");
-			}
-		} else if ($stmt2->rowCount() == 1) {
+			} else if ($stmt2->rowCount() == 1) {
 			$row = $stmt2->fetch(PDO::FETCH_ASSOC);
 			$hashed_password = $row["password_admin"];
 			//Se la password inserita dall'utente coincide con la password hashata presente nel db e legata a quell'email.

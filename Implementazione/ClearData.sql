@@ -278,7 +278,7 @@ insert into riservazione values (17, '2019-10-05', '2019-10-10', 17, 'lazza.yt@g
 insert into riservazione values (18, '2019-10-05', '2019-10-10', 18, 'lazza.yt@gmail.com');
 insert into riservazione values (19, '2019-10-05', '2019-10-10', 19, 'lazza.yt@gmail.com');
 insert into riservazione values (20, '2019-10-05', '2019-10-10', 20, 'lazza.yt@gmail.com');
-insert into riservazione values (21, '2019-11-25', '2020-01-25', 1, 'lazza.yt@gmail.com');
+insert into riservazione values (21, '2019-11-25', '2019-12-18', 1, 'lazza.yt@gmail.com');
 insert into riservazione values (22, '2019-11-15', '2019-11-20', 1, 'lazza.yt@gmail.com');
 insert into riservazione values (23, '2019-12-16', '2019-12-22', 1, 'lazza.yt@gmail.com');
 insert into riservazione values (24, '2019-12-29', '2020-01-05', 1, 'lazza.yt@gmail.com');

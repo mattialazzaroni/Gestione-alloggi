@@ -1,5 +1,5 @@
 <?php
-// Importo le classi PHPMailer nel namespace globale.
+//Importo le classi PHPMailer nel namespace globale.
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -101,15 +101,15 @@ if (isset($_POST['reg_user'])) {
 		} 
 		//Altrimenti procedo.
 		else if (count($errors) == 0){
-			$email = trim($email);
-			unset($stmt);
+		$email = trim($email);
+		unset($stmt);
 
-			//Creo una hash univoca in base all'orario corrente espresso in numero di secondi dall'epoca di Unix.
-			$hash = md5(time());
+		//Creo una hash univoca in base all'orario corrente espresso in numero di secondi dall'epoca di Unix.
+		$hash = md5(time());
 
-			//Definisco la query che inserisce l'utente.
-			$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
-              		VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
+		//Definisco la query che inserisce l'utente.
+		$query = "INSERT INTO utente (email, nome, cognome, password_utente, n_telefono, hash) 
+				VALUES(:email, '$name', '$surname', :password, '$full_number', '$hash')";
 
 			//Preparo la query.
 			if ($stmt = $db->prepare($query)) {

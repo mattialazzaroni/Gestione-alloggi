@@ -273,25 +273,25 @@ $checkout = "";
 
         <!-- Contenuto visivo della pagina -->
         <article class="card-body mx-auto" style="max-width:450px; margin-top:75px;">
-            <form id="formClienti" method="post" action="gestisci-clienti.php">
-                <h4 class="card-title mt-3 text-center">Gestisci i clienti</h4><br>
-                <?php if (isset($_POST['modifica']) || isset($_POST['salva_modifiche'])) : ?>
-                    <p class="grey-text text-center">Modifica la data di check-in e/o la data di check-out</p>
-                    <div class="form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
-                        </div>
-                        <input name="checkin" class="form-control" type="date" max="9999-12-31" min="<?php echo date('Y-m-d'); ?>" title="Data di check-in" value="<?php echo $checkin; ?>">
+        <form id="formClienti" method="post" action="gestisci-clienti.php">
+            <h4 class="card-title mt-3 text-center">Gestisci i clienti</h4><br>
+            <?php if (isset($_POST['modifica']) || isset($_POST['salva_modifiche'])) : ?>
+                <p class="grey-text text-center">Modifica la data di check-in e/o la data di check-out</p>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                     </div>
-                    <div class="form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
-                        </div>
-                        <input name="checkout" class="form-control" type="date" max="9999-12-31" min="<?php echo date('Y-m-d'); ?>" title="Data di check-out" value="<?php echo $checkout; ?>">
+                    <input name="checkin" class="form-control" type="date" max="9999-12-31" min="<?php echo date('Y-m-d'); ?>" title="Data di check-in" value="<?php echo $checkin; ?>">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                     </div>
-                    <button id="modifica" type="submit" name="salva_modifiche" class="btn btn-primary btn-block">Salva modifiche</button>
-                <?php endif ?>
-            </form>
+                    <input name="checkout" class="form-control" type="date" max="9999-12-31" min="<?php echo date('Y-m-d'); ?>" title="Data di check-out" value="<?php echo $checkout; ?>">
+                </div>
+                <button id="modifica" type="submit" name="salva_modifiche" class="btn btn-primary btn-block">Salva modifiche</button>
+            <?php endif ?>
+        </form>
         </article>
 
         <?php
@@ -359,7 +359,7 @@ $checkout = "";
                 <th>Elimina</th>
             </tr>
             <tr>";
-                //Per ogni elemento riga ritornata dalla query, aggiungo una riga alla tabella. 
+                //Per ogni riga ritornata dalla query, aggiungo una riga alla tabella. 
                 for ($i = 1; $i < $stmt->rowCount() + 1; $i++) {
                     $row = $stmt->fetch(PDO::FETCH_NUM);
                     echo "<tr>

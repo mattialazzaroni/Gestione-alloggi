@@ -162,7 +162,7 @@ ob_end_clean();
             include('server.php');
             ob_end_clean();
 
-            //Query che prende l'id più grande della tabella delle camera.
+            //Query che prende l'id più grande della tabella delle camere.
             $room_query = "SELECT camera.id
             FROM camera 
             JOIN alloggio
@@ -204,7 +204,7 @@ ob_end_clean();
                 $insert_reservation_query = "INSERT INTO riservazione values (" . $row[0] . ", '2019-10-05', '2019-10-05', " . $nextId . ", 'lazza.yt@gmail.com')";
                 $stmt = $db->prepare($insert_room_query);
                 $stmt1 = $db->prepare($insert_reservation_query);
-                //Eseguo la query.
+                //Eseguo le query.
                 $stmt->execute();
                 $stmt1->execute();
                 echo "<br><div class='text-success text-center'>

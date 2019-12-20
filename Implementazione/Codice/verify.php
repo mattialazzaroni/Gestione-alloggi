@@ -41,18 +41,18 @@ include('server.php');
         if ($match > 0) {
             $update = $db->prepare("UPDATE utente SET is_active='1' WHERE email='" . $email . "' AND hash='" . $hash . "' AND is_active='0'");
             $update->execute();
-            echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">';
-            echo '<br><div style="font-size:20px;"><b>Congratulazioni!</b><br> Il tuo account è stato attivato, ora puoi fare il login.</div><br>';
-            echo '<a href="login.php" class="btn btn-primary btn-block"> Vai al login </a>';
-            echo '</div>';
-        //Nel caso che la query non produca nessun risultato, stampo un messaggio di errore all'utente.
-        } else { 
-            echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">';
-            echo "<br><div>L'URL non è valido o hai già attivato il tuo account.</div><br>";
-            echo '<a href="index.php" class="btn btn-primary btn-block"> Torna alla home </a>';
-            echo '</div>';
+            echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">
+            <br><div style="font-size:20px;"><b>Congratulazioni!</b><br> Il tuo account è stato attivato, ora puoi fare il login.</div><br>
+            <a href="login.php" class="btn btn-primary btn-block"> Vai al login </a>
+            </div>';
+            //Nel caso che la query non produca nessun risultato, stampo un messaggio di errore all'utente.
+        } else {
+            echo '<div class="form-group text-center card-body mx-auto" style="max-width:450px;">
+            <br><div>L&apos;URL non è valido o hai già attivato il tuo account.</div><br>
+            <a href="index.php" class="btn btn-primary btn-block"> Torna alla home </a>
+            </div>';
         }
-    //Se non ricevo email o hash, stampo un messaggio di errore.
+        //Se non ricevo email o hash, stampo un messaggio di errore.
     } else {
         // Invalid approach
         echo '<br><div class="text-center">Approccio non valido, si prega di utilizzare il link che è stato inviato alla tua email.</div>';
